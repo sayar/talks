@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=1024, user-scalable=no">
+
+    <title>Hacking with the Cloud - Rami Sayar</title>
+    
+    <link rel="stylesheet" href="../deck.js/core/deck.core.css">
+    
+    <link rel="stylesheet" href="../deck.js/extensions/goto/deck.goto.css">
+    <link rel="stylesheet" href="../deck.js/extensions/menu/deck.menu.css">
+    <link rel="stylesheet" href="../deck.js/extensions/navigation/deck.navigation.css">
+    <link rel="stylesheet" href="../deck.js/extensions/status/deck.status.css">
+    <link rel="stylesheet" href="../deck.js/extensions/hash/deck.hash.css">
+    <link rel="stylesheet" href="../deck.js/extensions/scale/deck.scale.css">
+
+    <link rel="stylesheet" href="../deck.js/themes/style/swiss.css">
+    <link rel="stylesheet" href="../deck.js/themes/transition/horizontal-slide.css">
+    
+    <script src="../deck.js/modernizr.custom.js"></script>
+
+    <link rel="stylesheet" href="../deck.js/extensions/codemirror/deck.codemirror.css">
+
+</head>
+<body class="deck-container">
+    <section class="slide">
+    <h1>Hacking with the Cloud by <a href="http://twitter.com/ramisayar">@ramisayar</a></h1>
+    </section>
+
+    <section class="slide">
+        <h2>About Me</h2>
+        <p>U4 Computer Engineering Student from <a href="http://twitter.com/mcgillu">@McGillU</a></p>
+        <p>Founded the <a href="http://mcgillcodejam.com">Code Jam @ McGill</a> two years ago.</p>
+        <p>Last worked at <a href="http://twilio.com">Twilio</a>
+        <br /><br /><br /><br />
+        <p><small><a href="http://twitter.com/ramisayar">@ramisayar</a> - <a href="http://ramisayar.com">ramisayar.com</a></small></p>
+    </section>
+
+    <section class="slide">
+        <h1>This is not a regular talk, get your laptops out yo!</h1>
+        <p>Follow along at this url: http://talks-u2ixe3sq.dotcloud.com/cloudpaas/ </p>
+    </section>
+    
+    <section class="slide">
+        <h1>Thanks to the Microsoft Rep, we got pizza! Hurray!</h1>
+    </section>
+    
+    <section class="slide">
+        <h2>In this presentation, I assume</h2>
+        <ul>
+            <li>you all know git.</li>
+            <li>that you understand at least one of these langauges: Python, Ruby, Java, C#.</li>
+            <li>that you are beautiful snowflakes looking to escape the heat of deploying web apps for the code jam tomorrow.</li>
+        </ul>
+    </section>
+
+    <section class="slide">
+        <h2>Let's get started with Heroku</h2>
+        <ul>
+            <li><a href="http://heroku.com">Heroku.com</a> is a platform as a service provider that supports several languages/web frameworks.</li>
+            <li>Your code is uploaded via git and heroku takes care of running the code and ensuring the requirements and dependencies are met.</li>
+            <li>Every Heroku account gets 750 hours/month free for a single dyno (sort of like a process), that is generally enough to run your web app for free every month.</li>
+            <li>Heroku supports many many many languages, like literally every major popular language.</li>
+            <li>Heroku has a huge wealth of addons like databases, message queues, cache services, search services, etc... </li>
+            <li><strong>HEADS UP:</strong> Heroku does not allow your web app to write to the file system, you can only write to database or caching service.</li>
+            <li>Questions?</li>
+        </ul>
+    </section>
+
+    <section class="slide">
+        <h2>Deploying Our First App</h2>
+        <ul>
+            <li><strong>STEP 1:</strong> Sign up for Heroku and install the Heroku Toolbelt on your machine.</li>
+            <li><strong>STEP 2:</strong> Run 'heroku login' to finish the installation.</li>
+            <li><strong>STEP 3:</strong> Create a git repository for your project, use github!</li>
+            <li>Let's pause here for a bit.</li>
+        </ul>
+    </section>
+
+    <section class="slide">
+        <h2>Deploying a Ruby App to Heroku</h2>
+        <ul>
+            <li><strong>STEP 1:</strong> Let's write a simple web app using the sinatra framework. (web.rb)</li>
+            <textarea id="code" name="code" class="code" mode="ruby">
+require 'sinatra'
+
+get '/' do
+  "Hello world! Rami Rocks!"
+end
+            </textarea>
+            <li><strong>STEP 2:</strong> Declare dependencies with a Gemfile. (Gemfile)</li>
+            <textarea id="code" name="code" class="code" mode="ruby">
+source :rubygems
+gem 'sinatra', '1.1.0'
+gem 'thin'
+            </textarea>
+            <li><strong>STEP 3:</strong> Declare the process types with a Procfile. (Procfile)</li> 
+            <textarea id="code" name="code" class="code" mode="ruby">
+web: bundle exec ruby web.rb -p $PORT            
+            </textarea>
+        </ul>
+    </section>
+   
+    <section class="slide"> 
+        <h2>Deploying a Ruby App to Heroku</h2>
+        <ul>
+            <li><strong>STEP 4</strong> Store in Git.</li>
+            <textarea id="code" name="code" class="code" mode="bash">
+sudo gem install bundler
+touch Gemfile.lock
+bundle install
+git init
+git add .
+git commit -m "First Ruby App on Heroku"
+            </textarea>
+            <li><strong>STEP 5:</strong> Deploy App.</li>
+            <textarea id="code" name="code" class="code" mode="bash">
+heroku create
+git push heroku master
+heroku ps:scale web=1
+heroku open
+            </textarea>
+            <li><strong>STEP 6:</strong> DONE!</li>
+            <li>You can do so much more, check out the resouces at the end of this presentation.</li>
+        </ul>
+    </section>
+
+    <section class="slide">
+        <h2>Deploying a Java App to Heroku</h2>
+        <ul>
+            <li><strong>STEP 1:</strong> Let's write a simple web app using the Play framework. To create a basic app, run 'play new helloword'.</li>
+            <li><strong>STEP 2:</strong> Declare dependencies to Heroku. (conf/dependencies.yml)</li>
+            <textarea id="code" name="code" class="code" mode="java">
+# Application dependencies
+
+require:
+    - play 1.2.4
+            </textarea>
+            <li><strong>STEP 3:</strong> Declare the process types with a Procfile. (Procfile)</li> 
+            <textarea id="code" name="code" class="code" mode="ruby">
+web:    play run --http.port=$PORT $PLAY_OPTS
+            </textarea>
+        </ul>
+    </section>
+   
+    <section class="slide"> 
+        <h2>REPEAT STEPS FROM BEFORE.</h2>
+        <ul>
+            <li><strong>STEP 4</strong> Store in Git.</li>
+            <textarea id="code" name="code" class="code" mode="bash">
+git init
+git add .
+git commit -m "First Play App on Heroku"
+            </textarea>
+            <li><strong>STEP 5:</strong> Deploy App.</li>
+            <textarea id="code" name="code" class="code" mode="bash">
+heroku create
+git push heroku master
+heroku ps:scale web=1
+heroku open
+            </textarea>
+            <li><strong>STEP 6:</strong> DONE!</li>
+            <li>You can do so much more, check out the resouces at the end of this presentation.</li>
+        </ul>
+    </section>
+
+
+    <section class="slide">
+        <h2>Let's dotCloud!</h2>
+        <ul>
+            <li><a href="http://dotcloud.com">dotCloud.com</a> is a platform as a service provider that supports several languages/web frameworks and has unlimited free experiments!</li>
+            <li>Your code is uploaded via git and heroku takes care of running the code and ensuring the requirements and dependencies are met.</li>
+            <li><strong>HEADS UP:</strong> dotCloud does allow your web app to write to the file system if you need to... WOOT! </li>
+            <li>Questions?</li>
+        </ul>
+    </section>
+
+    <section class="slide">
+        <h2>Deploying a Python App to dotCloud</h2>
+        <ul>
+            <li>Deploying a python web app to dotCloud is much more interesting than on Heroku. </li>
+            <li>You can customize an nginx front end. </li>
+            <li>You can support multiple wsgi apps in one instance, e.g. django + tornado! </li>
+            <li>You can select your python version, requirements file, mongodb, etc.. </li>
+        </ul>
+    </section>
+   
+    <section class="slide">
+        <h2>Deploying a Python App to dotCloud</h2>
+        <ul>
+            <li><strong>STEP 1:</strong> 'sudo pip install dotcloud' and create a folder for you app. Declare the dotCloud app type. (dotcloud.yml)</li>
+            <textarea id="code" name="code" class="code" mode="python">
+www:
+  type: python
+  approot: ./
+            </textarea>
+            <li><strong>STEP 2:</strong> Silly simple wsgi app (You should not use this in practice). (wsgi.py)</li>
+            <textarea id="code" name="code" class="code" mode="python">
+def application(environ, start_response):
+    status = '200 OK'
+    response_headers = [('Content-type', 'text/plain')]
+    start_response(status, response_headers)
+    return ['Hello world!\n'] + ['{0}={1}\n'.format(k,environ[k])
+                                 for k in sorted(environ)]
+            </textarea>
+            <li><strong>STEP 3:</strong> Create the dotcloud app and push.</li>
+            <textarea id="code" name="code" class="code" mode="bash">
+dotcloud create helloworld
+dotcloud push ../
+            </textarea>
+        </ul>
+    </section>
+
+    <section class="slide">
+        <h2>Deploying a Django Python App to dotCloud</h2>
+        <p>You can take this further by having a real django app and the only change you have to make to your project is in the wsgi.py file.</p>
+        <textarea id="code" name="code" class="code" mode="python">
+import os
+os.environ['DJANGO_SETTINGS_MODULE'] = '.'
+import django.core.handlers.wsgi
+application = django.core.handlers.wsgi.WSGIHandler()
+        </textarea>
+    </section>
+
+    <section class="slide">
+        <h2>Windows Azure</h2>
+        <ul>
+            <li>Azure is even more interesting because it really borders close to providing IaaS services as well as PaaS.</li>
+            <li>You can create a virtual machines (e.g. a machine you can ssh into) or websites or cloud services.</li>
+            <li>The interesting product for our discussion is Azure Web Sites.</li>
+        </ul>
+    </section>
+    
+    <section class="slide">
+        <h2>Windows Azure Websites</h2>
+        <ul>
+            <li>Windows Azure Websites lets you bootstrap an application straight into the cloud without even opening your terminal.</li>
+            <li>You can select from various templates such as Wordpress, node.js or an asp.net MVC 4 app for example.</li>
+            <li>The killer feature is being able to create an asp.net mvc app and clicking the deploy to Azure button.</li>
+        </ul>
+    </section>
+
+    <section class="slide">
+        <h2>Windows Azure Websites</h2>
+        <p><a href="https://www.windowsazure.com/en-us/develop/net/tutorials/web-site-with-sql-database/">Let's hit up the docs and go through this step by step.</a></p>
+    </section>
+
+    <section class="slide">
+        <h2>References and Resources</h2>
+        <ul>
+            <li><a href="https://devcenter.heroku.com/articles/quickstart">Getting Started with Heroku</a></li>
+            <li><a href="https://devcenter.heroku.com/articles/ruby">Getting Started with Ruby on Heroku</a></li>
+            <li><a href="https://devcenter.heroku.com/articles/python">Getting Started with Python on Heroku</a></li>
+            <li><a href="http://docs.dotcloud.com/0.9/services/python/">dotCloud Python</a></li>
+            <li><a href="https://devcenter.heroku.com/articles/java-support">Heroku Java Support</a></li>
+            <li><a href="https://addons.heroku.com/">Heroku Addons</a></li>
+            <li><a href="https://www.windowsazure.com/en-us/develop/overview/">Azure Developer Center</a></li>
+            <li><a href="https://www.windowsazure.com/en-us/develop/net/tutorials/web-site-with-sql-database/">Deploying an ASP.NET Web Application to a Windows Azure Web Site and SQL Database</a></li>
+        </ul>
+    </section>
+
+    <a href="#" class="deck-prev-link" title="Previous">&#8592;</a>
+    <a href="#" class="deck-next-link" title="Next">&#8594;</a>
+
+    <p class="deck-status">
+        <span class="deck-status-current"></span>
+        /
+        <span class="deck-status-total"></span>
+    </p>
+
+    <form action="." method="get" class="goto-form">
+        <label for="goto-slide">Go to slide:</label>
+        <input type="text" name="slidenum" id="goto-slide" list="goto-datalist">
+        <datalist id="goto-datalist"></datalist>
+        <input type="submit" value="Go">
+    </form>
+
+    <a href="." title="Permalink to this slide" class="deck-permalink">#</a>
+
+    <script src="../deck.js/jquery-1.7.2.min.js"></script>
+    <script src="../deck.js/core/deck.core.js"></script>
+
+    <script src="../deck.js/core/deck.core.js"></script>
+    <script src="../deck.js/extensions/hash/deck.hash.js"></script>
+    <script src="../deck.js/extensions/menu/deck.menu.js"></script>
+    <script src="../deck.js/extensions/goto/deck.goto.js"></script>
+    <script src="../deck.js/extensions/status/deck.status.js"></script>
+    <script src="../deck.js/extensions/navigation/deck.navigation.js"></script>
+    <script src="../deck.js/extensions/scale/deck.scale.js"></script>
+
+    <script src="../deck.js/extensions/codemirror/codemirror.js"></script>
+
+    <script src="../deck.js/extensions/codemirror/mode/javascript/javascript.js"></script>
+    <script src="../deck.js/extensions/codemirror/mode/python/python.js"></script>
+    <script src="../deck.js/extensions/codemirror/mode/ruby/ruby.js"></script>
+
+    <script src="../deck.js/extensions/codemirror/mode/xml/xml.js"></script>
+    <script src="../deck.js/extensions/codemirror/mode/css/css.js"></script>
+    <script src="../deck.js/extensions/codemirror/mode/htmlmixed/htmlmixed.js"></script>
+
+    <script src="../deck.js/extensions/codemirror/deck.codemirror.js"></script>
+
+    <script>
+        $(function() {
+            $.deck('.slide');
+        });
+    </script>
+</body>
+</html>

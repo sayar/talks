@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+git clone https://github.com/sayar/deck.js.git
+git clone https://github.com/sayar/deck.js-codemirror.git
+ln -s ../../deck.js-codemirror/ deck.js/extensions/codemirror
