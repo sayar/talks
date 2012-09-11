@@ -1,0 +1,6 @@
+[submodule "deck.js"]
+	path = deck.js
+	url = git@github.com:sayar/deck.js.git
+[submodule "deck.js-codemirror"]
+	path = deck.js-codemirror
+	url = git@github.com:sayar/deck.js-codemirror.git
