@@ -6,6 +6,10 @@ Here lie the source for talks I have given at various functions, more to come!
 
 This presentation was given at McGill University to help students take advantage of Cloud PaaS services such as Heroku, dotCloud and Azure prior to the Code Jam hackathon. The talk can be found under the cloudpaas directory in this repository.
 
+## Introduction to Git and GitHub
+
+This presentation was given at McGill University to provide students with an introduction to Git and GitHub. The talk was performed live with a terminal but the introductory slides and git notes can be found under the gitbasics/ and the ecse321/tutorial2and3/ directory in this repository.
+
 ## License
 
 Everything in this repository is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
