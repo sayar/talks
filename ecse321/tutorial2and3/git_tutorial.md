@@ -191,7 +191,13 @@ git clone /path/to/repo
 git clone username@host:/path/to/repo
 ```
 
-Github Example: ```git clone git@github.com:username/repo.git```
+## Cloning from GitHub
+
+GitHub Example using HTTPS: ```git clone https://github.com/username/repo.git```
+
+If you have your SSH keys setup with your GitHub account, you can use the SSH transport. Benefits are that you will not have to constantly sign in with your GitHub account. See Setting up SSH Keys with GitHub.
+
+GitHub Example: ```git clone git@github.com:username/repo.git```
 
 ## Pushing changes to remote repository
 
@@ -242,7 +248,6 @@ If you are sharing a repository, you can still use pull requests to discuss and 
 
 [GitHub Using Pull Requests](https://help.github.com/articles/using-pull-requests)
 
-
 ## Pushing and Pulling Tags
 
 Tags are just like other objects, they need to be pushed and pulled. ``` git push [remotename] [tagname] ```
@@ -290,6 +295,10 @@ git config --global alias.st status
 built-in git GUI ```gitk```
 
 Interactive adding ```git add -i```
+
+## Setting up SSH Keys with GitHub
+
+The authoritative documentation is on [GitHub](https://help.github.com/articles/generating-ssh-keys). You will mostly have to generate an ssh key if you do not have one and upload the public key to GitHub.
 
 ## Advanced Topics
 * [Git Branch Rebasing](http://www.git-scm.com/book/en/Git-Branching-Rebasing)
