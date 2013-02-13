@@ -3,14 +3,14 @@
 
 Rami Sayar [@ramisayar](http://twitter/ramisayar)
 
-[Talks](github.com/sayar/talks) If you find a mistake, don't hesitate to fork the repository, clone it to your local machine, edit the mistake, git commit -a -m and then press the pull request button to notify me.
+[GitHub Talks](github.com/sayar/talks) If you find a mistake, don't hesitate to fork the repository, clone it to your local machine, edit the mistake, git commit -a -m and then press the pull request button to notify me.
 
 ## Introduction
 
 In this tutorial, we will learn about Unified Modeling Language (UML). 
 ![Image](http://upload.wikimedia.org/wikipedia/en/thumb/2/2d/UML_logo.gif/220px-UML_logo.gif)
 
-UML is a general-purpose modeling language used to represent object-oriented designs and complex software. It is popular in industry and you will often be asked in interviews to solve a problem using UML.
+UML is a general-purpose modelling language used to represent object-oriented designs and complex software. It is popular in industry and you will often be asked in interviews to solve a problem using UML.
 
 UML allows you to model a software system and visually represent both structural and behavioral views. This stands in sharp contrast with other diagrams such as class diagrams, sequence diagrams, state machine diagrams where the diagram is strictly representing structure or behavior.
 
@@ -50,7 +50,7 @@ A UML entity such as a class representes a "concept" with specific attributes an
 ![Image](KP-UML-Generalization-20060325.svg.png)
 [REFERENCE - Class Diagrams - Wikipedia](http://en.wikipedia.org/wiki/Class_diagram)
 
-#### Difference between Aggregation vs. Inhertiance
+#### Difference between Aggregation vs. Inheritance
 
 * Aggregation is a "hard" (a-part-of) relationship. Inheritance is a "soft" (kind-of) relationship.
 * Aggregation relates to instances.
