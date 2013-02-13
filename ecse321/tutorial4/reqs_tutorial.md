@@ -3,7 +3,7 @@
 
 Rami Sayar [@ramisayar](http://twitter/ramisayar)
 
-[Talks](github.com/sayar/talks) If you find a mistake, don't hesitate to fork the repository, clone it to your local machine, edit the mistake, git commit -a -m and then press the pull request button to notify me.
+[GitHub Talks](github.com/sayar/talks) If you find a mistake, don't hesitate to fork the repository, clone it to your local machine, edit the mistake, git commit -a -m and then press the pull request button to notify me.
 
 ## Introduction
 
@@ -15,7 +15,7 @@ In this tutorial, we are going to review some of the concepts introduced in the 
 
 Why are requirement specifications important? Let's take an example of what could happen when specification documents are not clear.
 
-<iframe width="420" height="315" src="http://www.youtube.com/embed/_yZHbh396rc" frameborder="0" allowfullscreen></iframe>
+[YouTube Video](http://www.youtube.com/embed/_yZHbh396rc)
 
 The video describes problems in the Ruby and JavaScript language interpreters. Language definitions are for the most part well specified, however, there are always gaps even in professional requirements specification. Although, in this case, language definitions get very technical about how languages should be implemented. The principle remains the same, without great specs, you can fall into gaps.
 
@@ -51,7 +51,7 @@ Karl Wieger's described 10 common traps in requirement documents.
 
 ### IEEE 830: SRS
 
-See IEEE 830 file.
+See IEEE 830 file, you will have to log into the McGill Library.
 
 ## Requirement Modeling
 
