@@ -67,20 +67,20 @@
     <section class="slide">
         <h2>Bridge</h2>
         <textarea id="code" name="code" class="code" mode="text/x-java" style="display: none;">
-public interface CreditCard {
+public interface PaymentAccount {
     public void getBalance(); public void credit(int amount);
 }
 
-public class GiftCard implements CreditCard {
+public class PrepaidCard implements PaymentAccount {
     private int balance;
-    public GiftCard(int balance){this.balance = balance;}
+    public PrepaidCard(int balance){this.balance = balance;}
     public void getBalance(){return this.balance;}
     public void credit(int amount){this.balance -= amount;}
 }
 
-public class PayPalCard implements CreditCard {
-    public void getBalance(){// Contact Paypal}
-    public void credit(int amount){// Contact Paypal}
+public class CreditCard implements PaymentAccount {
+    public void getBalance(){// Contact CC Processor}
+    public void credit(int amount){// Contact CC Processor}
 }
 
 public class Account extends Saveable {
@@ -120,36 +120,41 @@ public class PaymentStation {
     <section class="slide">
         <h2>Composite</h2>
         <textarea id="code" name="code" class="code" mode="text/x-java" style="display: none;">
-public class Station { int latitude; int longitude; }
+public class Location { int latitude; int longitude; }
 
-public interface StationArea { public List&lsaquo;Station&rsaquo; getStations(); }
+public interface Place { public List&lsaquo;Location&rsaquo; getLocations(); }
 
-public class PhysicalRegion implements StationArea {
+public class Region implements Place {
     public List&lsaquo;Region&rsaquo; subRegions;
     public List&lsaquo;Stations&rsaquo; localStations;
     
-    public List&lsaquo;Station&rsaquo; getStations(){
-        List&lsaquo;Station&rsaquo; stations = new ArrayList&lsaquo;Station&rsaquo;();
-        stations.addAll(this.localStations);    
-        
-        for(Region r: this.subRegions){
-            stations.addAll(r.getStations());
+    public List&lsaquo;Location&rsaquo; getLocations(){
+        List&lsaquo;Location&rsaquo; locs = new ArrayList&lsaquo;Location&rsaquo;();
+        for(Station s: this.localStations) {
+            locs.addAll(s.getLocations());
+        }
+        for(Region r: this.subRegions) {
+            locs.addAll(r.getLocations());
         }
         return stations;
     }
 }
 
-public class LogicalRegion extends PhysicalRegion {
-    public List&lsaquo;Station&rsaquo; getStations(){
-        // Do something special
+public class Station implements Place {
+    public Location location;
+    public List&lsaquo;Location&rsaquo; getLocations(){
+        // Return empty array.
+        List&lsaquo;Locations&rsaquo; locs= new ArrayList&lsaquo;Locations&rsaquo;();
+        locs.add(this.location);
+        return locs;
     }
 }
 
 public class Map {
-    public PhysicalRegion constructMontreal(){
-        PhysicalRegion montreal = new PhysicalRegion();
-        PhysicalRegion downtown = new PhysicalRegion();
-        PhysicalRegion suburb = new PhysicalRegion();
+    public Place constructMontreal(){
+        Region montreal = new Region();
+        Region downtown = new Region();
+        Region suburb = new Region();
         
         downtown.add(new Station());
         downtown.add(new Station());
@@ -157,11 +162,12 @@ public class Map {
         montreal.subRegions.add(downtown);
         montreal.subRegions.add(suburb);
         montreal.localStations.add(new Station());
+     
+        // Print Result
+        montreal.getLocations();
         
         return montreal;
     }
-    
-    public void getStations(Region) {}
 }
         </textarea>
     </section>
