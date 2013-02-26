@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=1024, user-scalable=no">
 
     <title>Tutorial 6 - Design Patterns - Rami Sayar</title>
-    
+
     <link rel="stylesheet" href="../../deck.js/core/deck.core.css">
-    
+
     <link rel="stylesheet" href="../../deck.js/extensions/goto/deck.goto.css">
     <link rel="stylesheet" href="../../deck.js/extensions/menu/deck.menu.css">
     <link rel="stylesheet" href="../../deck.js/extensions/navigation/deck.navigation.css">
@@ -18,7 +18,7 @@
 
     <link rel="stylesheet" href="../../deck.js/themes/style/swiss.css">
     <link rel="stylesheet" href="../../deck.js/themes/transition/horizontal-slide.css">
-    
+
     <script src="../../deck.js/modernizr.custom.js"></script>
 
     <link rel="stylesheet" href="../../deck.js/extensions/codemirror/deck.codemirror.css">
@@ -30,13 +30,14 @@
         <h1>Tutorial 6 - Design Patterns by <a href="http://twitter.com/ramisayar">@ramisayar</a></h1>
         <p>Follow along at this url: http://talks-u2ixe3sq.dotcloud.com/ecse321/tutorial6/</p>
     </section>
-    
+
     <section class="slide">
         <h1>Why Design Patterns?</h1>
     </section>
-    
+
     <section class="slide">
         <h2>Structural Design Patterns</h2>
+        <p>Note: I will try to keep the overlap with design patterns taught in class to a minimum.</p>
         <ul>
             <li>Adapter</li>
             <li><strong>Bridge</strong></li>
@@ -48,7 +49,7 @@
             <li>Retrofit Interface</li>
         </ul>
     </section>
-    
+
     <section class="slide">
         <h1>Problem - Account + CC</h1>
     </section>
@@ -101,22 +102,22 @@ public class PaymentStation {
 }
         </textarea>
     </section>
-    
+
     <section class="slide">
         <h1>Problem - Mapping Stations</h1>
     </section>
-    
+
     <section class="slide">
         <h2>Problem - Stations/Region Components</h2>
         <textarea id="code" name="code" class="code" mode="text/x-java" style="display: none;"></textarea>
     </section>
-    
+
     <section class="slide">
         <h2>Solution - Composite</h2>
         <img src="600px-Composite_UML_class_diagram_(fixed).svg.png" />
         <a href="http://en.wikipedia.org/wiki/Composite_pattern">Reference</a>
     </section>
-    
+
     <section class="slide">
         <h2>Composite</h2>
         <textarea id="code" name="code" class="code" mode="text/x-java" style="display: none;">
@@ -127,7 +128,7 @@ public interface Place { public List&lsaquo;Location&rsaquo; getLocations(); }
 public class Region implements Place {
     public List&lsaquo;Region&rsaquo; subRegions;
     public List&lsaquo;Stations&rsaquo; localStations;
-    
+
     public List&lsaquo;Location&rsaquo; getLocations(){
         List&lsaquo;Location&rsaquo; locs = new ArrayList&lsaquo;Location&rsaquo;();
         for(Station s: this.localStations) {
@@ -155,42 +156,42 @@ public class Map {
         Region montreal = new Region();
         Region downtown = new Region();
         Region suburb = new Region();
-        
+
         downtown.add(new Station());
         downtown.add(new Station());
-        
+
         montreal.subRegions.add(downtown);
         montreal.subRegions.add(suburb);
         montreal.localStations.add(new Station());
-     
+
         // Print Result
         montreal.getLocations();
-        
+
         return montreal;
     }
 }
         </textarea>
     </section>
-    
+
     <section class="slide">
         <h1>Better Example of Composites - XML/HTML</h1>
     </section>
-    
+
     <section class="slide">
         <h1>Problem - Fancy Bikes</h1>
     </section>
-    
+
     <section class="slide">
         <h2>Problem - Fancy Bikes Components</h2>
         <textarea id="code" name="code" class="code" mode="text/x-java" style="display: none;"></textarea>
     </section>
-    
+
     <section class="slide">
         <h2>Solution - Decorator</h2>
         <img src="500px-Decorator_UML_class_diagram.svg.png" />
         <a href="http://en.wikipedia.org/wiki/Decorator_pattern">Reference</a>
     </section>
-    
+
     <section class="slide">
         <h2>Decorator</h2>
         <textarea id="code" name="code" class="code" mode="text/x-java" style="display: none;">
@@ -214,29 +215,29 @@ public class BikeFactory{
     public void createBestBike(){
         Bike BEST_BIKE_EVER = new SuperFastBike(new WideSeatBike(new Bike()));
         BEST_BIKE_EVER.getComfortRating(); //15
-        
+
         Bike MOST_COMFY_BIKE_EVER = (new WideSeatBike(new Bike()));
         MOST_COMFY_BIKE_EVER.getComfortRating(); //20
     }
 }
         </textarea>
     </section>
-    
+
     <section class="slide">
         <h1>Problem - 3rd Party API</h1>
     </section>
-    
+
     <section class="slide">
         <h2>Problem - 3rd Party API</h2>
         <textarea id="code" name="code" class="code" mode="text/x-java" style="display: none;"></textarea>
     </section>
-    
+
     <section class="slide">
         <h2>Facade</h2>
         <img src="FacadeDesignPattern.png" />
         <a href="http://en.wikipedia.org/wiki/Facade_pattern">Reference</a>
     </section>
-    
+
     <section class="slide">
         <h2>Facade</h2>
         <textarea id="code" name="code" class="code" mode="text/x-java" style="display: none;">
@@ -255,9 +256,40 @@ public class RESTAPI{
 }
         </textarea>
     </section>
-    
+
+    <section class="slide">
+        <h2>Behavioral Design Patterns</h2>
+        <ul>
+            <li>BindingProperties</li>
+            <li><strong>ChainOfResponsibility</strong></li>
+            <li>Command</li>
+            <li>Interpreter</li>
+            <li>Iterator</li>
+            <li><strong>Mediator</strong></li>
+            <li><strong>Memento</strong></li>
+            <li>Observer</li>
+            <li>State</li>
+            <li>Strategy</li>
+            <li>TemplateMethod</li>
+            <li><strong>Visitor</strong></li>
+        </ul>
+    </section>
+
+    <section class="slide">
+        <h2>Creational Design Patterns</h2>
+        <ul>
+            <li><strong>AbstractFactory</strong></li>
+            <li><strong>Builder</strong></li>
+            <li>FactoryMethod</li>
+            <li>Monostate</li>
+            <li><strong>Prototype</strong></li>
+            <li><strong>Singleton<strong></li>
+        </ul>
+    </section>
+
+
     <!-- TODO: ADD REFERENCE SLIDES -->
-    
+
     <a href="#" class="deck-prev-link" title="Previous">&#8592;</a>
     <a href="#" class="deck-next-link" title="Next">&#8594;</a>
 
