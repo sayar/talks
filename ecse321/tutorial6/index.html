@@ -56,18 +56,18 @@
 
     <section class="slide">
         <h2>Problem - Account + CC Components</h2>
-        <textarea id="code" name="code" class="code" mode="text/x-java" style="display: none;"></textarea>
+        <textarea name="code" class="code" mode="text/x-java" style="display: none;"></textarea>
     </section>
 
     <section class="slide">
         <h2>Solution - Bridge</h2>
-        <img height="600px" src="500px-Bridge_UML_class_diagram.svg.png" />
+        <img height="600" alt="Bridge Class Diagram" src="500px-Bridge_UML_class_diagram.svg.png" />
         <a href="http://en.wikipedia.org/wiki/Bridge_pattern">Reference</a>
     </section>
 
     <section class="slide">
         <h2>Bridge</h2>
-        <textarea id="code" name="code" class="code" mode="text/x-java" style="display: none;">
+        <textarea name="code" class="code" mode="text/x-java" style="display: none;">
 public interface PaymentAccount {
     public void getBalance(); public void credit(int amount);
 }
@@ -109,18 +109,18 @@ public class PaymentStation {
 
     <section class="slide">
         <h2>Problem - Stations/Region Components</h2>
-        <textarea id="code" name="code" class="code" mode="text/x-java" style="display: none;"></textarea>
+        <textarea name="code" class="code" mode="text/x-java" style="display: none;"></textarea>
     </section>
 
     <section class="slide">
         <h2>Solution - Composite</h2>
-        <img src="600px-Composite_UML_class_diagram_(fixed).svg.png" />
+        <img alt="Composite UML Diagram" src="600px-Composite_UML_class_diagram_(fixed).svg.png" />
         <a href="http://en.wikipedia.org/wiki/Composite_pattern">Reference</a>
     </section>
 
     <section class="slide">
         <h2>Composite</h2>
-        <textarea id="code" name="code" class="code" mode="text/x-java" style="display: none;">
+        <textarea  name="code" class="code" mode="text/x-java" style="display: none;">
 public class Location { int latitude; int longitude; }
 
 public interface Place { public List&lsaquo;Location&rsaquo; getLocations(); }
@@ -183,18 +183,18 @@ public class Map {
 
     <section class="slide">
         <h2>Problem - Fancy Bikes Components</h2>
-        <textarea id="code" name="code" class="code" mode="text/x-java" style="display: none;"></textarea>
+        <textarea name="code" class="code" mode="text/x-java" style="display: none;"></textarea>
     </section>
 
     <section class="slide">
         <h2>Solution - Decorator</h2>
-        <img src="500px-Decorator_UML_class_diagram.svg.png" />
+        <img alt="Decorator UML Diagram" src="500px-Decorator_UML_class_diagram.svg.png" />
         <a href="http://en.wikipedia.org/wiki/Decorator_pattern">Reference</a>
     </section>
 
     <section class="slide">
         <h2>Decorator</h2>
-        <textarea id="code" name="code" class="code" mode="text/x-java" style="display: none;">
+        <textarea name="code" class="code" mode="text/x-java" style="display: none;">
 public class Bike {
     public int getComfortRating() {return 10;}
 }
@@ -229,18 +229,18 @@ public class BikeFactory{
 
     <section class="slide">
         <h2>Problem - 3rd Party API</h2>
-        <textarea id="code" name="code" class="code" mode="text/x-java" style="display: none;"></textarea>
+        <textarea name="code" class="code" mode="text/x-java" style="display: none;"></textarea>
     </section>
 
     <section class="slide">
         <h2>Facade</h2>
-        <img src="FacadeDesignPattern.png" />
+        <img alt="Facade UML Diagram" src="FacadeDesignPattern.png" />
         <a href="http://en.wikipedia.org/wiki/Facade_pattern">Reference</a>
     </section>
 
     <section class="slide">
         <h2>Facade</h2>
-        <textarea id="code" name="code" class="code" mode="text/x-java" style="display: none;">
+        <textarea name="code" class="code" mode="text/x-java" style="display: none;">
 public class Bike {}
 public class Accounts {}
 public class Station {}
@@ -271,8 +271,153 @@ public class RESTAPI{
             <li>State</li>
             <li>Strategy</li>
             <li>TemplateMethod</li>
-            <li><strong>Visitor</strong></li>
+            <li>Visitor</li>
         </ul>
+    </section>
+
+    <section class="slide">
+        <h1>Problem - Supervision Chain</h1>
+    </section>
+
+    <section class="slide">
+        <h2>Problem - Supervision Chain</h2>
+        <textarea name="code" class="code" mode="text/x-java" style="display: none;"></textarea>
+    </section>
+
+    <section class="slide">
+        <h2>Chain of Responsibility</h2>
+        <img height="400" alt="Chain of Responsibility Diagram" src="chain.gif " />
+        <a href="http://www.dofactory.com/Patterns/PatternChain.aspx">Reference</a>
+    </section>
+
+    <section class="slide">
+        <h2>Chain of Responsibility</h2>
+        <textarea name="code" class="code" mode="text/x-java" style="display: none;">
+abstract class Supervisor {
+    protected Supervisor next;
+    public void setNext(Supervisor next) {
+        this.next = next;
+    }
+    public void inform(String msg) {        
+        if (next != null) {
+            next.inform(msg);
+        }
+    }
+}
+ 
+class Manager extends Supervisor {
+    public void inform(String msg) {
+        // Do something!
+        super.inform(msg)
+    }
+}
+ 
+class Executive extends Supervisor {
+    public void inform(String msg) {
+        // Do something!
+        super.inform(msg)
+    }
+}
+
+class Mayor extends Supervisor {
+    public void inform(String msg) {
+        // Do something!
+        super.inform(msg)
+    }
+}
+// Creating a Chain
+Manager manager = new Manager();
+Executive exec = new Executive();
+Mayor mayor = new Mayor();
+manager.setNext(exec);
+exec.setNext(mayor);
+        </textarea>
+    </section>
+
+    <section class="slide">
+        <h1>Problem - Bixi Station, Trucks vs Central HQ</h1>
+    </section>
+
+    <section class="slide">
+        <h2>Problem - Bixi Station, Trucks vs Central HQ</h2>
+        <textarea name="code" class="code" mode="text/x-java" style="display: none;"></textarea>
+    </section>
+
+    <section class="slide">
+        <h2>Mediator</h2>
+        <img height="400" alt="Mediator Diagram" src="mediator.gif " />
+        <a href="http://www.dofactory.com/Patterns/PatternMediator.aspx">Reference</a>
+    </section>
+
+    <section class="slide">
+        <h2>Mediator</h2>
+        <textarea name="code" class="code" mode="text/x-java" style="display: none;">
+interface Resource {}
+class Bike implements Resource {}
+class TransportTruck implements Resource {}
+
+interface Controller {
+    public void coordinate();
+}
+class CheckInStation implements Controller {
+    public void coordinate() {
+        // Need more bikes/less bikes
+    }
+}
+class HQ implements Controller {
+    public void coordinate() {
+        // Need to know status of resources for tracking
+    }
+}
+        </textarea>
+    </section>
+
+    <section class="slide">
+        <h1>Problem - Undoing Transactions</h1>
+    </section>
+
+    <section class="slide">
+        <h2>Problem - Undoing Transactions</h2>
+        <textarea name="code" class="code" mode="text/x-java" style="display: none;"></textarea>
+    </section>
+
+    <section class="slide">
+        <h2>Memento</h2>
+        <img height="400" alt="Memento Diagram" src="memento.gif " />
+        <a href="http://www.dofactory.com/Patterns/PatternMemento.aspx">Reference</a>
+    </section>
+
+    <section class="slide">
+        <h2>Memento</h2>
+        <textarea name="code" class="code" mode="text/x-java" style="display: none;">
+class Account {
+    private CreditCard cc;
+    public Account(CreditCard cc);
+    
+    public bool changeCreditCard(CreditCard cc);
+    public AccountMemento createMemento();
+    public void setMemento();
+}
+
+class AccountMemento {
+    public CreditCard CC;
+    // other stuff...
+}
+
+class CheckInStation {
+    public class changeCC(Account account){
+        AccountMemento original = account.createMemento();
+        // Get User Credit Card
+        account.changeCreditCard(this.getCCInput());
+        // Confirm with User
+        if (cancel){
+            account.setMemento(original);
+        }
+        // Double check if funds are available.
+        //...
+    }
+}
+        </textarea>
     </section>
 
     <section class="slide">
@@ -282,13 +427,146 @@ public class RESTAPI{
             <li><strong>Builder</strong></li>
             <li>FactoryMethod</li>
             <li>Monostate</li>
-            <li><strong>Prototype</strong></li>
-            <li><strong>Singleton<strong></li>
+            <li>Prototype</li>
+            <li><strong>Singleton</strong></li>
         </ul>
     </section>
 
+    <section class="slide">
+        <h1>Problem - Multiple Bikes - Multiple Manufacturers</h1>
+    </section>
 
-    <!-- TODO: ADD REFERENCE SLIDES -->
+    <section class="slide">
+        <h2>Problem - Multiple Bikes - Multiple Manufacturers</h2>
+        <textarea name="code" class="code" mode="text/x-java" style="display: none;"></textarea>
+    </section>
+
+    <section class="slide">
+        <h2>Abstract Factory</h2>
+        <img height="400" alt="Abstract Factory Diagram" src="abstract.gif " />
+        <a href="http://www.dofactory.com/Patterns/PatternAbstract.aspx">Reference</a>
+    </section>
+
+    <section class="slide">
+        <h2>Abstract Factory</h2>
+        <textarea name="code" class="code" mode="text/x-java" style="display: none;">
+abstract class Bike {}
+class MountainBike extends Bike {}
+class HighSpeedBike extends Bike {}
+
+abstract class BikeProducer {
+    public Bike createBike();
+}
+class MontrealCompany extends BikeProducer {
+    public Bike createBike() { return new MountainBike(); }
+}
+class QuebecCompany extends BikeProducer {
+    public Bike createBike() { return new HighSpeedBike(); }
+}
+
+// Class client can select a BikeProducer and pass it around to anybody
+// who needs a bike.
+        </textarea>
+    </section>
+
+    <section class="slide">
+        <h1>Problem - Building a Bike</h1>
+    </section>
+
+    <section class="slide">
+        <h2>Problem - Building a Bike</h2>
+        <textarea name="code" class="code" mode="text/x-java" style="display: none;"></textarea>
+    </section>
+
+    <section class="slide">
+        <h2>Builder</h2>
+        <img height="400" alt="Builder Diagram" src="builder.gif " />
+        <a href="http://www.dofactory.com/Patterns/PatternBuilder.aspx#_self1">Reference</a>
+    </section>
+
+    <section class="slide">
+        <h2>Builder</h2>
+        <textarea name="code" class="code" mode="text/x-java" style="display: none;">
+class MontrealCompany : extends BikeProducer
+{
+    BikeBuilder builder = new MountainBikeBuilder();
+    // Builder uses a complex series of steps
+    public Bike createBike()
+    {
+        builder.BuildFrame();
+        builder.BuildWheels();
+        return builder.bike();
+    }
+}
+abstract class BikeBuilder
+{
+    protected Bike bike;
+    public Bike getBike() { return this.bike; }
+    public abstract void BuildFrame();
+    public abstract void BuildWheels();
+}
+class MountainBikeBuilder extends BikeBuilder
+{
+    public MountainBikeBuilder() { this.bike = new MountainBike(); }
+    public void BuildFrame() { // Set up mountain bike frame }
+    public void BuildWheels() { // Set up wheels }
+}
+        </textarea>
+    </section>
+
+    <section class="slide">
+        <h1>Problem - Single HQ</h1>
+    </section>
+
+    <section class="slide">
+        <h1>Singleton</h1>
+    </section>
+
+    <section class="slide">
+        <h2>Singleton - Bill Pugh Solution</h2>
+        <textarea name="code" class="code" mode="text/x-java" style="display: none;">
+public class Singleton {
+        // Private constructor prevents instantiation from other classes
+        private Singleton() { }
+ 
+        /**
+        * SingletonHolder is loaded on the first execution of Singleton.getInstance() 
+        * or the first access to SingletonHolder.INSTANCE, not before.
+        */
+        private static class SingletonHolder { 
+                public static final Singleton INSTANCE = new Singleton();
+        }
+ 
+        public static Singleton getInstance() {
+                return SingletonHolder.INSTANCE;
+        }
+}
+        </textarea>
+        <a href="http://en.wikipedia.org/wiki/Singleton_pattern">REFERENCE</a>
+    </section>
+
+    <section class="slide">
+        <h2>Singleton - Joshua Bloch Solution</h2>
+        <textarea name="code" class="code" mode="text/x-java" style="display: none;">
+public enum Singleton {
+    INSTANCE;
+    public void execute (String arg) {
+        //... perform operation here ...
+    }
+}
+        </textarea>
+        <a href="http://en.wikipedia.org/wiki/Singleton_pattern">REFERENCE</a>
+    </section>
+
+    <section class="slide">
+        <h2>References</h2>
+        <ul>
+            <li>Wikipedia</li>
+            <li>http://www.dofactory.com</li>
+            <li>http://www.oodesign.com</li>
+            <li>http://www.sourcemaking.com</li>
+        </ul>
+    </section>
 
     <a href="#" class="deck-prev-link" title="Previous">&#8592;</a>
     <a href="#" class="deck-next-link" title="Next">&#8594;</a>
