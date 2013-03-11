@@ -1,0 +1,573 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<style>
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote {
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: "Helvetica Neue", Helvetica, "Hiragino Sans GB", Arial, sans-serif;
+    font-size: 13px;
+    line-height: 18px;
+    color: #737373;
+    background-color: white;
+    margin: 10px 13px 10px 13px;
+}
+table {
+	margin: 10px 0 15px 0;
+	border-collapse: collapse;
+}
+td,th {	
+	border: 1px solid #ddd;
+	padding: 3px 10px;
+}
+th {
+	padding: 5px 10px;	
+}
+
+a {
+    color: #0069d6;
+}
+a:hover {
+    color: #0050a3;
+    text-decoration: none;
+}
+a img {
+    border: none;
+}
+p {
+    margin-bottom: 9px;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #404040;
+    line-height: 36px;
+}
+h1 {
+    margin-bottom: 18px;
+    font-size: 30px;
+}
+h2 {
+    font-size: 24px;
+}
+h3 {
+    font-size: 18px;
+}
+h4 {
+    font-size: 16px;
+}
+h5 {
+    font-size: 14px;
+}
+h6 {
+    font-size: 13px;
+}
+hr {
+    margin: 0 0 19px;
+    border: 0;
+    border-bottom: 1px solid #ccc;
+}
+blockquote {
+    padding: 13px 13px 21px 15px;
+    margin-bottom: 18px;
+    font-family:georgia,serif;
+    font-style: italic;
+}
+blockquote:before {
+    content:"\201C";
+    font-size:40px;
+    margin-left:-10px;
+    font-family:georgia,serif;
+    color:#eee;
+}
+blockquote p {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 18px;
+    margin-bottom: 0;
+    font-style: italic;
+}
+code, pre {
+    font-family: Monaco, Andale Mono, Courier New, monospace;
+}
+code {
+    background-color: #fee9cc;
+    color: rgba(0, 0, 0, 0.75);
+    padding: 1px 3px;
+    font-size: 12px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+pre {
+    display: block;
+    padding: 14px;
+    margin: 0 0 18px;
+    line-height: 16px;
+    font-size: 11px;
+    border: 1px solid #d9d9d9;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+pre code {
+    background-color: #fff;
+    color:#737373;
+    font-size: 11px;
+    padding: 0;
+}
+@media screen and (min-width: 914px) {
+    body {
+        width: 854px;
+        margin:10px auto;
+    }
+}
+@media print {
+	body,code,pre code,h1,h2,h3,h4,h5,h6 {
+		color: black;
+	}
+	table, pre {
+		page-break-inside: avoid;
+	}
+}
+</style>
+<title>Introduction to Software Engineering</title>
+
+</head>
+<body>
+<p><link rel="stylesheet" href="http://yandex.st/highlightjs/6.1/styles/default.min.css"></p>
+
+<script src="http://yandex.st/highlightjs/6.1/highlight.min.js"></script>
+
+
+<script>
+hljs.tabReplace = '    ';
+hljs.initHighlightingOnLoad();
+</script>
+
+
+<h1>Introduction to Software Engineering</h1>
+
+<h1>Design Pattern Tutorial</h1>
+
+<p>Rami Sayar <a href="http://twitter/ramisayar">@ramisayar</a></p>
+
+<p><a href="github.com/sayar/talks">GitHub Talks</a> If you find a mistake, don't hesitate to fork the repository, clone it to your local machine, edit the mistake, git commit -a -m and then press the pull request button to notify me.</p>
+
+<h2>Why Design Patterns?</h2>
+
+<p>Design patterns are solutions widely accepted to solve certain classes of engineering problems. Almost all of these patterns were taken from best practices in industry. We will try not to have too much overlap with design patterns studied in the lecture. All the code samples in these notes follow the Bixi Case Study.</p>
+
+<h2>Structural Design Patterns</h2>
+
+<p>Structural design patterns help the engineer address issues with the high-level class structure of complex software applications.</p>
+
+<ul>
+<li>Adapter</li>
+<li><strong>Bridge</strong></li>
+<li><strong>Composite</strong></li>
+<li><strong>Decorator</strong></li>
+<li><strong>Facade</strong></li>
+<li>Flyweight</li>
+<li>Proxy</li>
+<li>Retrofit Interface</li>
+</ul>
+
+
+<h3>Bridge Pattern</h3>
+
+<p>The Bridge pattern allow you to decouple an abstraction from its implementation so that the two can vary. <a href="http://en.wikipedia.org/wiki/Bridge_pattern">Wikipedia Reference</a></p>
+
+<p><img src="bridge.png" alt="image" /></p>
+
+<pre><code>public interface PaymentAccount {
+    public void getBalance(); public void credit(int amount);
+}
+
+public class PrepaidCard implements PaymentAccount {
+    private int balance;
+    public PrepaidCard(int balance){this.balance = balance;}
+    public void getBalance(){return this.balance;}
+    public void credit(int amount){this.balance -= amount;}
+}
+
+public class CreditCard implements PaymentAccount {
+    public void getBalance(){// Contact CC Processor}
+    public void credit(int amount){// Contact CC Processor}
+}
+
+public class Account extends Saveable {
+    private CreditCard cc;
+    public Account(CreditCard cc){this.cc = cc;}
+}
+
+public class RenewableAccount extends Account {
+    public renew(){//do something special}
+}
+
+public class PaymentStation {
+    public void createAccount(){
+        // Get CC credentials
+        Account newAccount = new Account(this.getCCInput());
+        newAccount.save();
+    }
+}
+</code></pre>
+
+<h3>Composite Pattern</h3>
+
+<p>The Composite pattern allows you to compose a collection of objects and treat them as a single object allowing you to have a single interface. It is mostly used to represent tree-based hierarchies or part-whole hierarchies as a composition into a single object. <a href="http://en.wikipedia.org/wiki/Composite_pattern">Wikipedia Reference</a></p>
+
+<p><img src="composite.png" alt="image" /></p>
+
+<pre><code>public class Location { int latitude; int longitude; }
+
+public interface Place { public List‹Location› getLocations(); }
+
+public class Region implements Place {
+    public List‹Region› subRegions;
+    public List‹Stations› localStations;
+
+    public List‹Location› getLocations(){
+        List‹Location› locs = new ArrayList‹Location›();
+        for(Station s: this.localStations) {
+            locs.addAll(s.getLocations());
+        }
+        for(Region r: this.subRegions) {
+            locs.addAll(r.getLocations());
+        }
+        return stations;
+    }
+}
+
+public class Station implements Place {
+    public Location location;
+    public List‹Location› getLocations(){
+        // Return empty array.
+        List‹Locations› locs= new ArrayList‹Locations›();
+        locs.add(this.location);
+        return locs;
+    }
+}
+
+public class Map {
+    public Place constructMontreal(){
+        Region montreal = new Region();
+        Region downtown = new Region();
+        Region suburb = new Region();
+
+        downtown.add(new Station());
+        downtown.add(new Station());
+
+        montreal.subRegions.add(downtown);
+        montreal.subRegions.add(suburb);
+        montreal.localStations.add(new Station());
+
+        // Print Result
+        montreal.getLocations();
+
+        return montreal;
+    }
+}
+</code></pre>
+
+<h3>Decorator Pattern</h3>
+
+<p>From Wikipedia, "the Decorator pattern allows behaviour to be added to an individual, either statically or dynamically, without affecting the behaviour of other objects from the same class." <a href="http://en.wikipedia.org/wiki/Decorator_pattern">Wikipedia Reference</a></p>
+
+<p>The decorator pattern can be considered an alternative subclassing. Also, the decorator can be used to add new behaviour at runtime.</p>
+
+<p><img src="decorator.png" alt="image" /></p>
+
+<pre><code>public class Bike {
+    public int getComfortRating() {return 10;}
+}
+
+public class WideSeatBike {
+    Bike decorated;
+    public WideSeatBike(Bike decorated) {this.decorated = decorated;}
+    public int getComfortRating(return this.decorated.getComfortRating()+10);
+}
+
+public class SuperFastBike {
+    Bike decorated;
+    public SuperFastBike(Bike decorated) {this.decorated = decorated;}
+    public int getComfortRating(return this.decorated.getComfortRating()-5);
+}
+
+public class BikeFactory{
+    public void createBestBike(){
+        Bike BEST_BIKE_EVER = new SuperFastBike(new WideSeatBike(new Bike()));
+        BEST_BIKE_EVER.getComfortRating(); //15
+
+        Bike MOST_COMFY_BIKE_EVER = (new WideSeatBike(new Bike()));
+        MOST_COMFY_BIKE_EVER.getComfortRating(); //20
+    }
+}
+</code></pre>
+
+<h3>Facade Pattern</h3>
+
+<p>The Facade pattern is essentially a means to provide a simple interface to a complex library of classes. It is also commonly called the application programming interface.</p>
+
+<p><img src="facade.png" alt="image" /></p>
+
+<pre><code>public class Bike {}
+public class Accounts {}
+public class Station {}
+
+public class RESTAPI{
+    public int getNumFreeBikes(){
+        int num = 0;
+        for(Station station: Map.constructMontreal().getStations()){
+            num += station.getFreeBikes();
+        }
+        return num;
+    }
+}
+</code></pre>
+
+<h2>Behavioural Design Patterns</h2>
+
+<p>Behavioural design patterns change the behaviour or interaction of a set of objects.</p>
+
+<ul>
+<li>Binding Properties</li>
+<li><strong>Chain Of Responsibility</strong></li>
+<li>Command</li>
+<li>Interpreter</li>
+<li>Iterator</li>
+<li><strong>Mediator</strong></li>
+<li><strong>Memento</strong></li>
+<li>Observer</li>
+<li>State</li>
+<li>Strategy</li>
+<li>Template Method</li>
+<li>Visitor</li>
+</ul>
+
+
+<h3>Chain of Responsibility</h3>
+
+<p>The Chain of Responsibility pattern allows you to chain the handling of an action through several objects, for example, sending a log message through several preprocessors before reaching its final destination. Thus, you can avoid tight coupling of the sender to the destination.</p>
+
+<p><img src="chain.gif" alt="image" /></p>
+
+<pre><code>abstract class Supervisor {
+    protected Supervisor next;
+    public void setNext(Supervisor next) {
+        this.next = next;
+    }
+    public void inform(String msg) {        
+        if (next != null) {
+            next.inform(msg);
+        }
+    }
+}
+
+class Manager extends Supervisor {
+    public void inform(String msg) {
+        // Do something!
+        super.inform(msg)
+    }
+}
+
+class Executive extends Supervisor {
+    public void inform(String msg) {
+        // Do something!
+        super.inform(msg)
+    }
+}
+
+class Mayor extends Supervisor {
+    public void inform(String msg) {
+        // Do something!
+        super.inform(msg)
+    }
+}
+// Creating a Chain
+Manager manager = new Manager();
+Executive exec = new Executive();
+Mayor mayor = new Mayor();
+manager.setNext(exec);
+exec.setNext(mayor);
+</code></pre>
+
+<h3>Mediator</h3>
+
+<p>The Mediator pattern allows you to define how two objects interact and gives you the ability to change the nature of that interaction dynamically.</p>
+
+<p><img src="mediator.gif" alt="image" /></p>
+
+<pre><code>interface Resource {}
+class Bike implements Resource {}
+class TransportTruck implements Resource {}
+
+interface Controller {
+    public void coordinate();
+}
+class CheckInStation implements Controller {
+    public void coordinate() {
+        // Need more bikes/less bikes
+    }
+}
+class HQ implements Controller {
+    public void coordinate() {
+        // Need to know status of resources for tracking
+    }
+}
+</code></pre>
+
+<h3>Memento</h3>
+
+<p>The Memento patterns allows you to break encapsulation and save the internal state of an object, which can allow you to restore an object or undo changes.</p>
+
+<p><img src="memento.gif" alt="image" /></p>
+
+<pre><code>class Account {
+    private CreditCard cc;
+    public Account(CreditCard cc);
+
+    public bool changeCreditCard(CreditCard cc);
+    public AccountMemento createMemento();
+    public void setMemento();
+}
+
+class AccountMemento {
+    public CreditCard CC;
+    // other stuff...
+}
+
+class CheckInStation {
+    public class changeCC(Account account){
+        AccountMemento original = account.createMemento();
+        // Get User Credit Card
+        account.changeCreditCard(this.getCCInput());
+        // Confirm with User
+        if (cancel){
+            account.setMemento(original);
+        }
+        // Double check if funds are available.
+        //...
+    }
+}
+</code></pre>
+
+<h2>Creational Design Patterns</h2>
+
+<p>Creational design patterns deal with the creation of objects.</p>
+
+<ul>
+<li><strong>Abstract Factory</strong></li>
+<li><strong>Builder</strong></li>
+<li>Factory Method</li>
+<li>Monostate</li>
+<li>Prototype</li>
+<li><strong>Singleton</strong></li>
+</ul>
+
+
+<h3>Abstract Factory</h3>
+
+<p>"The abstract factory pattern is a software creational design pattern that provides a way to encapsulate a group of individual factories that have a common theme without specifying their concrete classes." <a href="http://en.wikipedia.org/wiki/Abstract_factory_pattern">Wikipedia Reference</a></p>
+
+<p><img src="abstract.gif" alt="image" /></p>
+
+<pre><code>abstract class Bike {}
+class MountainBike extends Bike {}
+class HighSpeedBike extends Bike {}
+
+abstract class BikeProducer {
+    public Bike createBike();
+}
+class MontrealCompany extends BikeProducer {
+    public Bike createBike() { return new MountainBike(); }
+}
+class QuebecCompany extends BikeProducer {
+    public Bike createBike() { return new HighSpeedBike(); }
+}
+
+// Class client can select a BikeProducer and pass it around to anybody
+// who needs a bike.
+</code></pre>
+
+<h3>Builder</h3>
+
+<p>The Builder pattern allows you to abstract the different steps of an object's construction.</p>
+
+<p><img src="builder.gif" alt="image" /></p>
+
+<pre><code>class MontrealCompany : extends BikeProducer
+{
+    BikeBuilder builder = new MountainBikeBuilder();
+    // Builder uses a complex series of steps
+    public Bike createBike()
+    {
+        builder.BuildFrame();
+        builder.BuildWheels();
+        return builder.bike();
+    }
+}
+abstract class BikeBuilder
+{
+    protected Bike bike;
+    public Bike getBike() { return this.bike; }
+    public abstract void BuildFrame();
+    public abstract void BuildWheels();
+}
+class MountainBikeBuilder extends BikeBuilder
+{
+    public MountainBikeBuilder() { this.bike = new MountainBike(); }
+    public void BuildFrame() { // Set up mountain bike frame }
+    public void BuildWheels() { // Set up wheels }
+}
+</code></pre>
+
+<h3>Singleton</h3>
+
+<p>The Singleton pattern restricts the instantiation of a class to one object over a period of time and allows universal access to this object. <a href="http://en.wikipedia.org/wiki/Singleton_pattern">Wikipedia Reference</a></p>
+
+<h4>Bill Pugh Solution</h4>
+
+<pre><code>public class Singleton {
+        // Private constructor prevents instantiation from other classes
+        private Singleton() { }
+
+        /**
+        * SingletonHolder is loaded on the first execution of Singleton.getInstance() 
+        * or the first access to SingletonHolder.INSTANCE, not before.
+        */
+        private static class SingletonHolder { 
+                public static final Singleton INSTANCE = new Singleton();
+        }
+
+        public static Singleton getInstance() {
+                return SingletonHolder.INSTANCE;
+        }
+}
+</code></pre>
+
+<h4>Joshua Bloch Solution</h4>
+
+<pre><code>public enum Singleton {
+    INSTANCE;
+    public void execute (String arg) {
+        //... perform operation here ...
+    }
+}
+</code></pre>
+</body>
+</html>
