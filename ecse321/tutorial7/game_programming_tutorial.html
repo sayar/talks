@@ -221,7 +221,7 @@ shutdown()
 
 <ul>
 <li><strong>Thread:</strong> A thread is a seperate path of code execution.</li>
-<li><strong>Semaphore:</strong> A lock is a method of controlling access to data from several threads. (Also see Mutexes and Locks)</li>
+<li><strong>Semaphore:</strong> A semaphore is a method of controlling access to data. (See <a href="http://en.wikipedia.org/wiki/Mutual_exclusion">Mutexes</a> and <a href="http://en.wikipedia.org/wiki/Lock_(computer_science">Locks</a>))</li>
 </ul>
 
 
@@ -236,6 +236,7 @@ shutdown()
 <li>The resource manager prevents duplicate resources from being loaded from the file system and taking up unnecessary memory. You will often reuse the same image/texture so loading it again each time will reduce your performance.</li>
 <li>The resource manager can handle resources that are dependent on each other.</li>
 <li>The resource manager might do some type of reference counting and unload resources from memory when they are no longer used or needed.</li>
+<li>The resource manager takes care of loading from files in the background.</li>
 </ol>
 
 
