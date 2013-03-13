@@ -67,7 +67,7 @@ Attached is sample code that demonstrates how to draw geometric primities, and l
 Concurrency and parallalism are extremely important topics in software engineering. Threading will often be mentioned in the context of game programming. We will have a separate tutorial on threading but for now, I will define some terms and ask you to stay patient until the next tutorial.
 
 * **Thread:** A thread is a seperate path of code execution.
-* **Semaphore:** A lock is a method of controlling access to data from several threads. (Also see Mutexes and Locks)
+* **Semaphore:** A semaphore is a method of controlling access to data. (See [Mutexes](http://en.wikipedia.org/wiki/Mutual_exclusion) and [Locks](http://en.wikipedia.org/wiki/Lock_(computer_science)))
 
 ## Resource Management
 
@@ -79,6 +79,7 @@ In general, a good resource manager would have the following features:
 2. The resource manager prevents duplicate resources from being loaded from the file system and taking up unnecessary memory. You will often reuse the same image/texture so loading it again each time will reduce your performance.
 3. The resource manager can handle resources that are dependent on each other.
 4. The resource manager might do some type of reference counting and unload resources from memory when they are no longer used or needed.
+5. The resource manager takes care of loading from files in the background.
 
 ## Animation and Sprites
 
