@@ -161,5 +161,4 @@ NOTE: You may have used other build tools for Java projects such as `Maven`. The
 ## References
 
 [Tutorial: Hello World with Apache Ant](http://ant.apache.org/manual/tutorial-HelloWorldWithAnt.html)
-
 [What is Ant?](http://codefeed.com/tutorial/ant_intro.html)

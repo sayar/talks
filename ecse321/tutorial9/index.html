@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=1024, user-scalable=no">
+
+    <title>Tutorial 9 - junit, mockito, ant - Rami Sayar</title>
+
+    <link rel="stylesheet" href="../../deck.js/core/deck.core.css">
+
+    <link rel="stylesheet" href="../../deck.js/extensions/goto/deck.goto.css">
+    <link rel="stylesheet" href="../../deck.js/extensions/menu/deck.menu.css">
+    <link rel="stylesheet" href="../../deck.js/extensions/navigation/deck.navigation.css">
+    <link rel="stylesheet" href="../../deck.js/extensions/status/deck.status.css">
+    <link rel="stylesheet" href="../../deck.js/extensions/hash/deck.hash.css">
+    <link rel="stylesheet" href="../../deck.js/extensions/scale/deck.scale.css">
+
+    <link rel="stylesheet" href="../../deck.js/themes/style/swiss.css">
+    <link rel="stylesheet" href="../../deck.js/themes/transition/horizontal-slide.css">
+
+    <script src="../../deck.js/modernizr.custom.js"></script>
+
+    <link rel="stylesheet" href="../../deck.js/extensions/codemirror/deck.codemirror.css">
+    <link rel="stylesheet" href="../../deck.js/extensions/codemirror/themes/default.css">
+
+</head>
+<body class="deck-container">
+    <section class="slide">
+        <h1>Tutorial 9 - junit, mockito, ant by <a href="http://twitter.com/ramisayar">@ramisayar</a></h1>
+        <p>Follow along at this url: http://talks-u2ixe3sq.dotcloud.com/ecse321/tutorial9/</p>
+    </section>
+
+    <section class="slide">
+        <h2>JUnit</h2>
+        <ul>
+            <li>Test Framework</li>
+            <li>Uses annotations</li>
+            <li>Widely used in industry.</li>
+        </ul>
+    </section>
+    
+    <section class="slide">
+        <h2>Principles of Testing</h2>
+        <ul>
+			<li>Testing serves to ensure compliance with requirements. Failure is not meeting the requirements.</li>
+			<li>Testing should be integrated from inception.</li>
+			<li>Start with units and move to integration testing.</li>
+			<li>The potential test search space is massive, only cover the most likely situations and edge cases.</li>
+			<li>Tests are best written by some one who didn't write the code, who isn't biased.</li>
+        </ul>
+    </section>
+
+	<section class="slide">
+        <h1>Software is testable if I/O can be observed and system can be decomposed.</h1>
+    </section>
+
+    <section class="slide">
+        <h2>Types of Testing</h2>
+        <ul>
+			<li>Unit-testing</li>
+			<li>Integration testing</li>
+			<li>Regression testing</li>
+			<li>System testing</li>
+			<li>Acceptance testing</li>
+        </ul>
+    </section>
+
+	<section class="slide">
+        <h2>Test Driven Development</h2>
+        <ol>
+			<li>Write tests first.</li>
+			<li>First fail the test cases.</li>
+			<li>Keep the unit small.</li>
+        </ol>
+    </section>
+    
+    <section class="slide">
+        <h2>Unit-testing with JUnit</h2>
+        <textarea name="code" class="code" mode="text/x-java" style="display: none;">
+@Test
+public void testMultiply() {
+   assertEquals("TEST CONDITION 50=50", 50, 50);
+ } 
+        </textarea>
+    </section>
+
+	<section class="slide">
+        <h2>JUnit Annotations</h2>
+        <ul>
+			<li>`@Test` executes a method as a test case in the test class.</li>
+			<li>`@Before` executes a method once before each test in a class. `@After` executes a method once after each test in a class.</li>
+			<li>`@BeforeClass` executes a method once before any test in a class. `@AfterClass` executes a method once after any test in a class.</li>
+			<li>`@Ignore` ignores a test.</li>
+			<li>`@Test(expected = Exception.class)` fails a test if it does not throw an exception.</li>
+			<li>`@Test(timeout=100)` fails a test if it takes longer than 100 milliseconds.</li>
+        </ul>
+    </section>
+
+	<section class="slide">
+        <h2>Annotation Order of Priority</h2>
+        <ul>
+			<li>@BeforeClass - One Time Set Up</li>
+			<li>@Before - Set Up</li>
+			<li>@Test - Test</li>
+			<li>@After - Tear Down</li>
+			<li>@Before - Set Up</li>
+			<li>@Test - Test</li>
+			<li>@After - Tear Down</li>
+			<li>@AfterClass - One Time Tear Down</li>
+        </ul>
+    </section>
+
+    <section class="slide">
+        <h2>Test with Exception Example</h2>
+        <textarea name="code" class="code" mode="text/x-java" style="display: none;">
+@Test(expected = ArithmeticException.class)  
+public void divideByZero() {  
+    int k = 1/0;
+    fail();
+}  
+        </textarea>
+    </section>
+
+	<section class="slide">
+        <h2>JUnit Assert Statements</h2>
+        <ul>
+			<li>fail(string): Purposely fails a test with the string without checking a condition.</li>
+			<li>assertTrue(message, condition): Checks if the condition is true.</li>
+			<li>assertEquals(message, expected, actual): Checks if the expected and actual value are equal.</li>
+			<li>assertEquals(message, expected, actual, tolerance): Checks if the expected and actual value are equal within a tolerance value. This is used to compare floating point values.</li>
+			<li>assertNull(message, object): Checks if an object is null. assertNotNull(message, object) does the opposite.</li>
+        </ul>
+    </section>
+
+    <section class="slide">
+        <h2>JUnit Test Suite</h2>
+        <textarea name="code" class="code" mode="text/x-java" style="display: none;">
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+import org.junit.runners.Suite.SuiteClasses;
+
+@RunWith(Suite.class)
+@SuiteClasses({ MyClassTest.class, MySecondClassTest.class })
+public class AllTests {
+
+} 
+        </textarea>
+    </section>
+
+    <section class="slide">
+        <h2>JUnit Test Runner</h2>
+        <textarea name="code" class="code" mode="text/x-java" style="display: none;">
+import org.junit.runner.JUnitCore;
+import org.junit.runner.Result;
+import org.junit.runner.notification.Failure;
+
+public class MyTestRunner {
+  public static void main(String[] args) {
+    Result result = JUnitCore.runClasses(MyClassTest.class);
+    for (Failure failure : result.getFailures()) {
+      System.out.println(failure.toString());
+    }
+  }
+}
+        </textarea>
+    </section>
+
+	<section class="slide">
+        <h2>Mockito</h2>
+        <ul>
+			<li>Mock representation of resources such as dependencies or "stubs".</li>
+			<li>Verify interactions between different classes.</li>
+			<li>Mockito allows us to create mock objects easily.</li>
+        </ul>
+    </section>
+
+    <section class="slide">
+        <h2>Mocking a Class</h2>
+        <textarea name="code" class="code" mode="text/x-java" style="display: none;">
+abstract class Supervisor {
+    protected Supervisor next;
+    public void setNext(Supervisor next) {
+        this.next = next;
+    }
+    public void inform(String msg) {        
+        if (next != null) {
+            next.inform(msg);
+        }
+    }
+}
+ 
+class Manager extends Supervisor {
+    public void inform(String msg) {
+        // Do something!
+        super.inform(msg)
+    }
+}
+ 
+class Executive extends Supervisor {
+    public void inform(String msg) {
+        // Do something!
+        super.inform(msg)
+    }
+}
+
+class Mayor extends Supervisor {
+    public void inform(String msg) {
+        // Do something!
+        super.inform(msg)
+    }
+}
+// Creating a Chain
+Manager manager = new Manager();
+Executive exec = new Executive();
+Mayor mayor = new Mayor();
+manager.setNext(exec);
+exec.setNext(mayor);
+        </textarea>
+    </section>
+
+    <section class="slide">
+        <h2>Test Verification</h2>
+        <textarea name="code" class="code" mode="text/x-java" style="display: none;">
+import static org.mockito.Mockito.*;
+
+...
+
+@Test
+public void testInteraction(){
+    // Creating a mock object.
+    Supervisor superv = mock(Supervisor.class);
+
+    Manager manager = new Manager();
+    Executive exec = new Executive();
+    Mayor mayor = new Mayor();
+    manager.setNext(exec);
+    exec.setNext(mayor);
+    mayor.setNext(superv);
+
+    // Defining behaviour
+    when(superv.inform(anyString())).thenReturn(true);
+
+    String m = "message";
+    manager.inform(m);
+
+    // Verifying behaviour
+    verify(superv, times(1)).inform(m);
+}
+        </textarea>
+    </section>
+
+	<section class="slide">
+        <h2>Ant</h2>
+        <ul>
+			<li>Ant is a tool often used to build Java applications.</li>
+			<li>Ant supplies built-in tasks to compile, assmble, test and run Java applications using a build file.</li>
+        </ul>
+    </section>
+
+    <section class="slide">
+        <h2>Simple Build Process</h2>
+        <textarea name="code" class="code" mode="text/x-java" style="display: none;">
+mkdir -p build/classes build/jar src
+vim src/HelloWorld.java
+javac -sourcepath src -d classes src/HelloWorld.java
+java -cp classes HelloWorld
+        </textarea>
+    </section>
+    
+	<section class="slide">
+        <h1>Ant to the Rescue!</h1>
+    </section>
+    
+    <section class="slide">
+        <h2>Sample Ant build.xml</h2>
+        <textarea name="code" class="code" mode="xml" style="display: none;">
+TODO:HERE
+        </textarea>
+    </section>
+   
+       <section class="slide">
+        <h2>Running Ant</h2>
+        <textarea name="code" class="code" mode="xml" style="display: none;">
+ant compile
+ant jar
+ant run
+        </textarea>
+    </section>
+   
+    <section class="slide">
+        <h2>Better build.xml</h2>
+        <textarea name="code" class="code" mode="xml" style="display: none;">
+TODO:HERE
+        </textarea>
+    </section>
+   
+	<section class="slide">
+        <h2>Managing Dependencies</h2>
+        <textarea name="code" class="code" mode="xml" style="display: none;">
+TODO:HERE
+        </textarea>
+    </section>
+   
+    <section class="slide">
+        <h2>References</h2>
+        <ul>
+			<li><a href="http://www.vogella.com/articles/JUnit/article.html#unittesting">JUnit Testing</a></li>
+			<li><a href="http://www.mkyong.com/tutorials/junit-tutorials/">JUnit Tutorial</a></li>
+			<li><a href="http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html">Mockito API</a></li>
+			<li><a href="http://jnb.ociweb.com/jnb/jnbSep2010.html">Mockito - Integration testing made easier</a></li>
+			<li><a href="http://ant.apache.org/manual/tutorial-HelloWorldWithAnt.html">Tutorial: Hello World with Apache Ant</a></li>
+			<li><a href="http://codefeed.com/tutorial/ant_intro.html">What is Ant?</a></li>
+        </ul>
+    </section>
+
+    <a href="#" class="deck-prev-link" title="Previous">&#8592;</a>
+    <a href="#" class="deck-next-link" title="Next">&#8594;</a>
+
+    <p class="deck-status">
+        <span class="deck-status-current"></span>
+        /
+        <span class="deck-status-total"></span>
+    </p>
+
+    <form action="." method="get" class="goto-form">
+        <label for="goto-slide">Go to slide:</label>
+        <input type="text" name="slidenum" id="goto-slide" list="goto-datalist">
+        <datalist id="goto-datalist"></datalist>
+        <input type="submit" value="Go">
+    </form>
+
+    <a href="." title="Permalink to this slide" class="deck-permalink">#</a>
+
+    <script src="../../deck.js/jquery-1.7.2.min.js"></script>
+    <script src="../../deck.js/core/deck.core.js"></script>
+
+    <script src="../../deck.js/extensions/hash/deck.hash.js"></script>
+    <script src="../../deck.js/extensions/menu/deck.menu.js"></script>
+    <script src="../../deck.js/extensions/goto/deck.goto.js"></script>
+    <script src="../../deck.js/extensions/status/deck.status.js"></script>
+    <script src="../../deck.js/extensions/navigation/deck.navigation.js"></script>
+    <script src="../../deck.js/extensions/scale/deck.scale.js"></script>
+
+    <script src="../../deck.js/extensions/codemirror/codemirror.js"></script>
+    <script src="../../deck.js/extensions/codemirror/mode/python/python.js"></script>
+    <script src="../../deck.js/extensions/codemirror/mode/clike/clike.js"></script>
+    <script src="../../deck.js/extensions/codemirror/deck.codemirror.js"></script>
+
+    <script>
+        $(function() {
+            $.deck('.slide');
+        });
+    </script>
+</body>
+</html>

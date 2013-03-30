@@ -7,7 +7,7 @@ Rami Sayar [@ramisayar](http://twitter/ramisayar)
 
 ## Introduction
 
-The purpose of these notes is to introduce you to unit-testing with JUnit. JUnit is a test framework which uses annotations to construct tests and test suites. It is currently in its fourth version and is widely-used in industry, practically the standard framework.
+The purpose of these notes is to introduce you to unit-testing with JUnit. JUnit is a test framework which uses annotations to construct tests and test suites. It is currently in its fourth version and is widely used in industry, practically the standard framework.
 
 ## Some Principles of Testing
 
