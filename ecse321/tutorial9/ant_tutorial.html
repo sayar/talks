@@ -1,0 +1,312 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<style>
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote {
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: "Helvetica Neue", Helvetica, "Hiragino Sans GB", Arial, sans-serif;
+    font-size: 13px;
+    line-height: 18px;
+    color: #737373;
+    background-color: white;
+    margin: 10px 13px 10px 13px;
+}
+table {
+	margin: 10px 0 15px 0;
+	border-collapse: collapse;
+}
+td,th {	
+	border: 1px solid #ddd;
+	padding: 3px 10px;
+}
+th {
+	padding: 5px 10px;	
+}
+
+a {
+    color: #0069d6;
+}
+a:hover {
+    color: #0050a3;
+    text-decoration: none;
+}
+a img {
+    border: none;
+}
+p {
+    margin-bottom: 9px;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #404040;
+    line-height: 36px;
+}
+h1 {
+    margin-bottom: 18px;
+    font-size: 30px;
+}
+h2 {
+    font-size: 24px;
+}
+h3 {
+    font-size: 18px;
+}
+h4 {
+    font-size: 16px;
+}
+h5 {
+    font-size: 14px;
+}
+h6 {
+    font-size: 13px;
+}
+hr {
+    margin: 0 0 19px;
+    border: 0;
+    border-bottom: 1px solid #ccc;
+}
+blockquote {
+    padding: 13px 13px 21px 15px;
+    margin-bottom: 18px;
+    font-family:georgia,serif;
+    font-style: italic;
+}
+blockquote:before {
+    content:"\201C";
+    font-size:40px;
+    margin-left:-10px;
+    font-family:georgia,serif;
+    color:#eee;
+}
+blockquote p {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 18px;
+    margin-bottom: 0;
+    font-style: italic;
+}
+code, pre {
+    font-family: Monaco, Andale Mono, Courier New, monospace;
+}
+code {
+    background-color: #fee9cc;
+    color: rgba(0, 0, 0, 0.75);
+    padding: 1px 3px;
+    font-size: 12px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+pre {
+    display: block;
+    padding: 14px;
+    margin: 0 0 18px;
+    line-height: 16px;
+    font-size: 11px;
+    border: 1px solid #d9d9d9;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+pre code {
+    background-color: #fff;
+    color:#737373;
+    font-size: 11px;
+    padding: 0;
+}
+@media screen and (min-width: 914px) {
+    body {
+        width: 854px;
+        margin:10px auto;
+    }
+}
+@media print {
+	body,code,pre code,h1,h2,h3,h4,h5,h6 {
+		color: black;
+	}
+	table, pre {
+		page-break-inside: avoid;
+	}
+}
+</style>
+<title>Introduction to Software Engineering</title>
+
+</head>
+<body>
+<h1>Introduction to Software Engineering</h1>
+
+<h1>Ant Tutorial</h1>
+
+<p>Rami Sayar <a href="http://twitter/ramisayar">@ramisayar</a></p>
+
+<p><a href="github.com/sayar/talks">GitHub Talks</a> If you find a mistake, don't hesitate to fork the repository, clone it to your local machine, edit the mistake, <code>git commit -a -m</code> and then press the pull request button to notify me.</p>
+
+<h2>Introduction</h2>
+
+<p>The purpose of these notes is to introduce you to building and compiling things with ant. Ant is a tool often used to build Java applications. Ant supplies built-in tasks to compile, assmble, test and run Java applications using a build file.</p>
+
+<h2>Project Preparation</h2>
+
+<p>Ideally, you want to generate class files to a different location than the same directory as your source files. Typically, you will have a <code>classes</code> or <code>objects</code> folder for compiled files, <code>jar</code> or <code>bin</code> for a jar or executable file and a <code>src</code> or <code>source</code> directory.</p>
+
+<p>To do the above using the compiler directly can become complex and unweildy for large projects.</p>
+
+<pre><code>mkdir -p build/classes build/jar src
+vim src/HelloWorld.java
+javac -sourcepath src -d classes src/HelloWorld.java
+java -cp classes HelloWorld
+</code></pre>
+
+<h2>Ant to the Rescue!</h2>
+
+<p>If we have more files, more directories, dependencies on other jar files, a more complicated build process, etc… it becomes unnecessarily difficult to interface with the compiler directly, tedious, error prone and genuinely unpleasant.</p>
+
+<p>Perhaps, you need a more complicated build process than the one described above. Perhaps, you need to download the source before compiled, prepare a build area by creating standard set of directories, configure the source code, validate it, compile it, test it, zip the executabe, build documentation, etc…</p>
+
+<p>Build tools allow you to describe your build process, the dependencies between the steps, execute and manage the build, etc… without forcing every developer on a team to know the intimate details of the process. The build tool manages the build process for you and handles all of the details and steps. Ant provides you with a set of tools and techniques to define a build process and execute it.</p>
+
+<p>Ant uses a build.xml file to describe your process and is typically placed at the root of your project directory. Ant uses xml to describe the build process, the following a simple example to do what we did above using the command line directly with the exception that we also added the ability to generate a build file.</p>
+
+<p>NOTE: The example code is taken from <a href="http://ant.apache.org/manual/tutorial-HelloWorldWithAnt.html">the official Apache Ant tutorial</a></p>
+
+<pre><code>&lt;project&gt;
+
+    &lt;target name="clean"&gt;
+        &lt;delete dir="build"/&gt;
+    &lt;/target&gt;
+
+    &lt;target name="compile"&gt;
+        &lt;mkdir dir="build/classes"/&gt;
+        &lt;javac srcdir="src" destdir="build/classes"/&gt;
+    &lt;/target&gt;
+
+    &lt;target name="jar"&gt;
+        &lt;mkdir dir="build/jar"/&gt;
+        &lt;jar destfile="build/jar/HelloWorld.jar" basedir="build/classes"&gt;
+            &lt;manifest&gt;
+                &lt;attribute name="Main-Class" value="HelloWorld"/&gt;
+            &lt;/manifest&gt;
+        &lt;/jar&gt;
+    &lt;/target&gt;
+
+    &lt;target name="run"&gt;
+        &lt;java jar="build/jar/HelloWorld.jar" fork="true"/&gt;
+    &lt;/target&gt;
+
+&lt;/project&gt;
+</code></pre>
+
+<p>Looking at the above build.xml file, we see a root node called project and several children called target. Each target has a name attribute which identifies what the target does. Inside each target you will see several nodes. The first node we can see is delete which simply deletes a directory or file. The second node is mkdir which simple creates a directory. The next node of interest is javac, this is very similar to the javac command line interface, we can set a src dir, a dest dir and more. The next node of interest is the jar node, which also has a child called manifest which allows us to set attributes to the jar file, such as a <code>Main-Class</code>. The last node of interest is the java node, which allows us to specify a jar to run with a fork (in another process).</p>
+
+<p>To compile, build and run any of the targets above, you can execute the following in the root directory. <code>ant TARGET_NAME</code></p>
+
+<pre><code>ant compile
+ant jar
+ant run
+</code></pre>
+
+<p><code>ant compile jar run</code></p>
+
+<p>Let's enhance the above build process to include nomenclature and cleaning mechanism to remove previously build class files.</p>
+
+<pre><code>&lt;project name="HelloWorld" basedir="." default="main"&gt;
+
+    &lt;property name="src.dir"     value="src"/&gt;
+
+    &lt;property name="build.dir"   value="build"/&gt;
+    &lt;property name="classes.dir" value="${build.dir}/classes"/&gt;
+    &lt;property name="jar.dir"     value="${build.dir}/jar"/&gt;
+
+    &lt;property name="main-class"  value="HelloWorld"/&gt;
+
+
+
+    &lt;target name="clean"&gt;
+        &lt;delete dir="${build.dir}"/&gt;
+    &lt;/target&gt;
+
+    &lt;target name="compile"&gt;
+        &lt;mkdir dir="${classes.dir}"/&gt;
+        &lt;javac srcdir="${src.dir}" destdir="${classes.dir}"/&gt;
+    &lt;/target&gt;
+
+    &lt;target name="jar" depends="compile"&gt;
+        &lt;mkdir dir="${jar.dir}"/&gt;
+        &lt;jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}"&gt;
+            &lt;manifest&gt;
+                &lt;attribute name="Main-Class" value="${main-class}"/&gt;
+            &lt;/manifest&gt;
+        &lt;/jar&gt;
+    &lt;/target&gt;
+
+    &lt;target name="run" depends="jar"&gt;
+        &lt;java jar="${jar.dir}/${ant.project.name}.jar" fork="true"/&gt;
+    &lt;/target&gt;
+
+    &lt;target name="clean-build" depends="clean,jar"/&gt;
+
+    &lt;target name="main" depends="clean,run"/&gt;
+
+&lt;/project&gt;
+</code></pre>
+
+<p>The new nodes such as property allow us to set a key-value which we can then refer to in other places in the build process using the <code>${}</code> mechanism.</p>
+
+<h2>Managing Dependencies</h2>
+
+<p>Large java software projects will typically use many libraries and as a result have multiple dependencies. A common library used by java projects is Log4J. To integrate log4j into your project, you would download the latest jar and add it to a <code>lib</code> directory in you project root folder, you would then have to make that log4j is in your classpath for your project to compile. Handling dependencies is a perfect use case for build tools. Let's modify our above build.xml to add support for a <code>lib</code> directory and automatically adding jars to the class path.</p>
+
+<pre><code>&lt;project name="HelloWorld" basedir="." default="main"&gt;
+    ...
+    &lt;property name="lib.dir" value="lib"/&gt;
+
+    &lt;path id="classpath"&gt;
+        &lt;fileset dir="${lib.dir}" includes="**/*.jar"/&gt;
+    &lt;/path&gt;
+    ...
+    &lt;target name="compile"&gt;
+        &lt;mkdir dir="${classes.dir}"/&gt;
+        &lt;javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath"/&gt;
+    &lt;/target&gt;
+
+    &lt;target name="run" depends="jar"&gt;
+        &lt;java fork="true" classname="${main-class}"&gt;
+            &lt;classpath&gt;
+                &lt;path refid="classpath"/&gt;
+                &lt;path location="${jar.dir}/${ant.project.name}.jar"/&gt;
+            &lt;/classpath&gt;
+        &lt;/java&gt;
+    &lt;/target&gt;
+    ...
+&lt;/project&gt;
+</code></pre>
+
+<p>Above you can see we specified a path node to easily referene paths in our build process, this is then used to build the classpath list in the run and compile mode.</p>
+
+<h2>Conclusion</h2>
+
+<p>The above notes should be enough to give you a test of Ant and to get you started with a simple build process for your project. Ant offers many built-in tools which can simplify your life. I highly recommend you take a look at the Ant documentation to learn more.</p>
+
+<p>NOTE: You may have used other build tools for Java projects such as <code>Maven</code>. These are also wonderful tools which take a different approach than Ant. However, the project grader expects an Ant build file for the same of consistency.</p>
+
+<h2>References</h2>
+
+<p><a href="http://ant.apache.org/manual/tutorial-HelloWorldWithAnt.html">Tutorial: Hello World with Apache Ant</a>
+<a href="http://codefeed.com/tutorial/ant_intro.html">What is Ant?</a></p>
+</body>
+</html>

@@ -275,7 +275,31 @@ java -cp classes HelloWorld
     <section class="slide">
         <h2>Sample Ant build.xml</h2>
         <textarea name="code" class="code" mode="xml" style="display: none;">
-TODO:HERE
+&lt;project&gt;
+
+    &lt;target name="clean"&gt;
+        &lt;delete dir="build"/&gt;
+    &lt;/target&gt;
+
+    &lt;target name="compile"&gt;
+        &lt;mkdir dir="build/classes"/&gt;
+        &lt;javac srcdir="src" destdir="build/classes"/&gt;
+    &lt;/target&gt;
+
+    &lt;target name="jar"&gt;
+        &lt;mkdir dir="build/jar"/&gt;
+        &lt;jar destfile="build/jar/HelloWorld.jar" basedir="build/classes"&gt;
+            &lt;manifest&gt;
+                &lt;attribute name="Main-Class" value="HelloWorld"/&gt;
+            &lt;/manifest&gt;
+        &lt;/jar&gt;
+    &lt;/target&gt;
+
+    &lt;target name="run"&gt;
+        &lt;java jar="build/jar/HelloWorld.jar" fork="true"/&gt;
+    &lt;/target&gt;
+
+&lt;/project&gt;
         </textarea>
     </section>
    
@@ -291,14 +315,74 @@ ant run
     <section class="slide">
         <h2>Better build.xml</h2>
         <textarea name="code" class="code" mode="xml" style="display: none;">
-TODO:HERE
+&lt;project name="HelloWorld" basedir="." default="main"&gt;
+
+    &lt;property name="src.dir"     value="src"/&gt;
+
+    &lt;property name="build.dir"   value="build"/&gt;
+    &lt;property name="classes.dir" value="${build.dir}/classes"/&gt;
+    &lt;property name="jar.dir"     value="${build.dir}/jar"/&gt;
+
+    &lt;property name="main-class"  value="HelloWorld"/&gt;
+
+
+
+    &lt;target name="clean"&gt;
+        &lt;delete dir="${build.dir}"/&gt;
+    &lt;/target&gt;
+
+    &lt;target name="compile"&gt;
+        &lt;mkdir dir="${classes.dir}"/&gt;
+        &lt;javac srcdir="${src.dir}" destdir="${classes.dir}"/&gt;
+    &lt;/target&gt;
+
+    &lt;target name="jar" depends="compile"&gt;
+        &lt;mkdir dir="${jar.dir}"/&gt;
+        &lt;jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}"&gt;
+            &lt;manifest&gt;
+                &lt;attribute name="Main-Class" value="${main-class}"/&gt;
+            &lt;/manifest&gt;
+        &lt;/jar&gt;
+    &lt;/target&gt;
+
+    &lt;target name="run" depends="jar"&gt;
+        &lt;java jar="${jar.dir}/${ant.project.name}.jar" fork="true"/&gt;
+    &lt;/target&gt;
+
+    &lt;target name="clean-build" depends="clean,jar"/&gt;
+
+    &lt;target name="main" depends="clean,run"/&gt;
+
+&lt;/project&gt;
         </textarea>
     </section>
    
 	<section class="slide">
         <h2>Managing Dependencies</h2>
         <textarea name="code" class="code" mode="xml" style="display: none;">
-TODO:HERE
+&lt;project name="HelloWorld" basedir="." default="main"&gt;
+    ...
+    &lt;property name="lib.dir" value="lib"/&gt;
+
+    &lt;path id="classpath"&gt;
+        &lt;fileset dir="${lib.dir}" includes="**/*.jar"/&gt;
+    &lt;/path&gt;
+    ...
+    &lt;target name="compile"&gt;
+        &lt;mkdir dir="${classes.dir}"/&gt;
+        &lt;javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath"/&gt;
+    &lt;/target&gt;
+
+    &lt;target name="run" depends="jar"&gt;
+        &lt;java fork="true" classname="${main-class}"&gt;
+            &lt;classpath&gt;
+                &lt;path refid="classpath"/&gt;
+                &lt;path location="${jar.dir}/${ant.project.name}.jar"/&gt;
+            &lt;/classpath&gt;
+        &lt;/java&gt;
+    &lt;/target&gt;
+    ...
+&lt;/project&gt;
         </textarea>
     </section>
    
