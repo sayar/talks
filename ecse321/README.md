@@ -2,9 +2,14 @@
 
 All tutorials I presented as a Teaching Assistant for ECSE 321 - Introduction to Software Engineering can be found in this directory. If there is a mistake, or if you would like to propose an improvement, don't hesitate to send me a pull request.
 
-* Tutorial 1: Java Review
-* Tutorial 2 and 3: Git Tutorial
-* Tutorial 4: Requirement Specifications Tutorial
+* Tutorial 1: Java Review (not included due to license).
+* Tutorial 2 and 3: Git Tutorial.
+* Tutorial 4: Requirement Specifications Tutorial.
+* Tutorial 5: UML Tutorial.
+* Tutorial 6: Design Patterns Tutorial.
+* Tutorial 7: Basic Game Programming Tutorial.
+* Tutorial 8: Java Swing Tutorial.
+* Tuturial 9: Ant Tutorial, JUnit Tutorial, Mockito Tutorial.
 
 ## License
 
