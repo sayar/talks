@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="author" content="Rami Sayar @ramisayar" />
+  <title>Databases and SQL</title>
+  <link rel="stylesheet" type="text/css" media="screen, projection, print"
+    href="http://www.w3.org/Talks/Tools/Slidy2/styles/slidy.css" />
+  <script src="http://www.w3.org/Talks/Tools/Slidy2/scripts/slidy.js.gz"
+    charset="utf-8" type="text/javascript"></script>
+</head>
+<body>
+<div class="slide titlepage">
+  <h1 class="title">Databases and SQL</h1>
+  <p class="author">
+Rami Sayar <a href="http://twitter/ramisayar">@ramisayar</a>
+  </p>
+  <p class="date">May 1st, 2013</p>
+</div>
+<div class="section slide level2" id="introduction">
+<h1 id="introduction">Introduction</h1>
+<p>The purpose of this tutorial is to introduce you to databases and SQL. A computer database is a collection of data stored on a computer and may be examined using a program. When one refers to a database such as MySQL typically they are referring to a database management system which may house several databases. Data can be stored and built in several different ways each with its own merits and applications. The model that we will use for this tutorial is the relational database model.</p>
+</div>
+<div class="section slide level2" id="relational-databases">
+<h1 id="relational-databases">Relational Databases</h1>
+<p>In the relational database model, data is split into tables. Think of tables as Excel spreadsheets, each row is an unit of data and the columns are the different attributes of that data.</p>
+Countries Table
+<pre>
+id  name        population
+1   Canada      34million
+2   USA         310million
+</pre>
+
+City Table
+<pre>
+id  name        country    population
+1   Montreal     Canada     2million
+2   NYC         USA         8million        
+</pre>
+
+<p>The real power of the relational data model is the ability to reduce data redundancy and to relate units of data with each other. In this model, you can relate a unit of data with another using a one-to-one relationship, a one-to-many relationship or a many-to-one relationship or a many-to-many relationship.</p>
+<p>For example, we can see from the two tables above that the data between cities and countries are related and that there is repetition in the country and name columns. We can relate a city without a country using a one-to-one relationship. E.g. Each city is in only one country. However, a country can have many cities so perhaps we should model this relationship as a one-to-many relationship. A many-to-many relationship is a relationship where each unit of data is related to many units and vice-versa.</p>
+<p>Primary keys are unique identifiers that can be used to refer to units of data. Foreign keys are links to other units of data which are used to relate to other data.</p>
+</div>
+<div class="section slide level2" id="sql">
+<h1 id="sql">SQL</h1>
+<p>SQL stands for Structured Query Language and is used as a common language to access and manipulate data in a RDBMS. SQL can execute queries, retrieve data, insert, update data as well as create or drop databases and tables. SQL is an ANSI standard.</p>
+</div>
+<div class="section slide level2" id="sql-syntax">
+<h1 id="sql-syntax">SQL Syntax</h1>
+<p>SQL is written very differently from the programming languages that you may be familiar with and it is not case-sensitive. It typically follows this syntax:</p>
+<pre><code>[SQL Command] [column|*] [CLAUSES/CONDITIONS] FROM [table];</code></pre>
+<p>The most common SQL commands:</p>
+<ul>
+<li><code>SELECT</code> - used to retrieve data</li>
+<li><code>UPDATE</code> - used to update data</li>
+<li><code>DELETE</code> - used to delete data</li>
+<li><code>INSERT INTO</code> - used to insert data</li>
+</ul>
+</div>
+<div class="section slide level2" id="select-statement">
+<h1 id="select-statement">SELECT Statement</h1>
+<p>The SELECT statement is used to retrieve data from a database, the result is returned to the caller. The syntax looks like this</p>
+<pre><code>SELECT column_name,column_name
+FROM table_name</code></pre>
+<p>and</p>
+<pre><code>SELECT * FROM table_name</code></pre>
+<p>Sometimes you may have duplicate values in a column, by replaced <code>SELECT</code> with <code>SELECT DISTINCT</code>, this problem can be solved.</p>
+</div>
+<div class="section slide level2" id="where-clause">
+<h1 id="where-clause">WHERE Clause</h1>
+<p>The WHERE clause is used to extract records that match a certain set of conditions. Add <code>WHERE column_name operator value</code> at the end of the above SQL command.</p>
+<pre><code>SELECT * FROM Customers
+WHERE Country=&#39;Mexico&#39;;</code></pre>
+<p>The operators available are =, &lt;&gt; (not equal), &gt;, &lt;. &gt;=, &lt;=, etc...</p>
+<p>You can also chain where clauses using the AND and OR operators.</p>
+<pre><code>SELECT * FROM Customers
+WHERE Country=&#39;Germany&#39;
+AND City=&#39;Berlin&#39;;</code></pre>
+</div>
+<div class="section slide level2" id="order-by-clause">
+<h1 id="order-by-clause">ORDER BY Clause</h1>
+<p>The ORDER BY clause allows you to order items by a specific column or multiple columns. The options are descending (DESC) and ascending (ASC).</p>
+<pre><code>SELECT * FROM Customers
+ORDER BY Country DESC;</code></pre>
+</div>
+<div class="section slide level2" id="insert-statement">
+<h1 id="insert-statement">INSERT Statement</h1>
+<p>To insert units of data into a table, you have to use the INSERT statement which has the following format:</p>
+<pre><code>INSERT INTO table_name
+VALUES (value1,value2,value3,...)</code></pre>
+<p>OR</p>
+<pre><code>INSERT INTO table_name (column1,column2,column3,...)
+VALUES (value1,value2,value3,...)</code></pre>
+<p>E.g.</p>
+<pre><code>INSERT INTO Customers (CustomerID, CustomerName, City, Country)
+VALUES (&#39;Cardinal&#39;, &#39;Stavanger&#39;, &#39;Norway&#39;)</code></pre>
+</div>
+<div class="section slide level2" id="update-statement">
+<h1 id="update-statement">UPDATE Statement</h1>
+<p>To update units of data in a table, you have to use the UPDATE statement which has the following format:</p>
+<pre><code>UPDATE table_name
+SET column1=value, column2=value2,...
+WHERE some_column=some_value</code></pre>
+<p>As you can notice, you have to use the WHERE clause to specify which rows to update, otherwise you may inadvertently update all the rows.</p>
+</div>
+<div class="section slide level2" id="delete-statement">
+<h1 id="delete-statement">DELETE Statement</h1>
+<p>The DELETE statement is used to delete rows in a table, and has the following format:</p>
+<pre><code>DELETE FROM table_name
+WHERE some_column=some_value</code></pre>
+</div>
+<div class="section slide level2" id="what-is-mysql">
+<h1 id="what-is-mysql">What is MySQL?</h1>
+<p>MySQL is an open source relational database management system. It uses a server-client architecture and is widely used in industry. MySQL is cross-platform, to install the database for your operating system, you can find instructions here: http://dev.mysql.com/doc/refman/5.5/en//installing.html</p>
+</div>
+<div class="section slide level2" id="jdbc">
+<h1 id="jdbc">JDBC</h1>
+<p>JDBC stands for Java Database Connectivity and is a data access technology for Java. It provides methods for querying and update data in a RDBMS such as MySQL. When using JDBC, you provide information queries and the results are converted into objects in Java so you can use them just any plain object.</p>
+</div>
+<div class="section slide level2" id="how-does-jdbc-work">
+<h1 id="how-does-jdbc-work">How Does JDBC Work?</h1>
+<p>Your java application will call JDBC which then loads a particular driver for the DBMS system you want to talk to, the driver then talks to the database. The application can work with several different types of databases at the same time. You can change database engines without changing application code.</p>
+</div>
+<div class="section slide level2" id="loading-jdbc-drivers">
+<h1 id="loading-jdbc-drivers">Loading JDBC Drivers</h1>
+<p>To load the driver from MySQL, we can use reflection to load the library.</p>
+<pre><code>Class.forName(&quot;com.mysql.jdbc.Driver&quot;);</code></pre>
+<p>When the driver is loaded, it will register itself with the JDBC DriverManager and prepare itself for execution. You can also manually create an instance of a driver and call</p>
+<pre><code>DriverManager.registerDriver(driver);</code></pre>
+</div>
+<div class="section slide level2" id="connecting-to-the-database">
+<h1 id="connecting-to-the-database">Connecting to the Database</h1>
+<p>To connect to a database using a driver, we need to identify its location. JDBC identifies databases using a URL. You give the URL to the driver manager who will then attempt to connect to the database using one of the loaded drivers.</p>
+<pre><code>Connection con = DriverManager.getConnection(&quot;jdbc:some_db&quot;, user, password);</code></pre>
+<p>The connection URL for MySQL typically is in this format:</p>
+<pre><code>jdbc:mysql://host:port/&lt;db_name&gt;</code></pre>
+</div>
+<div class="section slide level2" id="interaction-with-the-database">
+<h1 id="interaction-with-the-database">Interaction with the Database</h1>
+<p>We create a Statement object using the Connection object. A statement can then execute an SQL query which then returns a ResultSet.</p>
+<p>First, we have to create the SQL query. Here we are selecting everything from the Customers table where the Country = Mexico.</p>
+<pre><code>String queryStr = &quot;SELECT * FROM Customers WHERE Country=&#39;Mexico&#39;&quot;;</code></pre>
+<p>Second, create the Java object that will hold the SQL statement.</p>
+<pre><code>Statement stmt = con.createStatement();</code></pre>
+<p>Third, use the statement to execute the query string and than store the result in a ResultSet object.</p>
+<pre><code>ResultSet rs = stmt.executeQuery(queryStr);</code></pre>
+<p>If we want to execute a statement which will cause a modification to the data (e.g. update or delete the data). We use the <code>stmt.executeUpdate()</code> method instead.</p>
+</div>
+<div class="section slide level2" id="working-with-resultsets">
+<h1 id="working-with-resultsets">Working with ResultSets</h1>
+<p>ResultSet objects provide us with access to the results of executing a Statement object. You can use only one ResultSet per Statement. The results are retrieved in sequence, like a List. The current position in the list is maintained by the ResultSet and you advance to the next row by calling <code>next()</code>.</p>
+<p>In the following example, we will query a coffee table and iterate through the results so that we can print them into the console. Take note of the <code>while (rs.next())</code> line of code.</p>
+<pre><code>public static void viewTable(Connection con, String dbName)
+    throws SQLException {
+
+    Statement stmt = null;
+    String query =
+        &quot;select COF_NAME, SUP_ID, PRICE, &quot; +
+        &quot;SALES, TOTAL &quot; +
+        &quot;from &quot; + dbName + &quot;.COFFEES&quot;;
+
+    try {
+        stmt = con.createStatement();
+        ResultSet rs = stmt.executeQuery(query);
+        while (rs.next()) {
+            String coffeeName = rs.getString(&quot;COF_NAME&quot;);
+            int supplierID = rs.getInt(&quot;SUP_ID&quot;);
+            float price = rs.getFloat(&quot;PRICE&quot;);
+            int sales = rs.getInt(&quot;SALES&quot;);
+            int total = rs.getInt(&quot;TOTAL&quot;);
+            System.out.println(coffeeName + &quot;\t&quot; + supplierID +
+                               &quot;\t&quot; + price + &quot;\t&quot; + sales +
+                               &quot;\t&quot; + total);
+        }
+    } catch (SQLException e ) {
+        JDBCTutorialUtilities.printSQLException(e);
+    } finally {
+        if (stmt != null) { stmt.close(); }
+    }
+}</code></pre>
+<p>Do not forget to call <code>close()</code> on the ResultSet, this will allow you to reuse the Statement object you previous created.</p>
+<p>For each row in the result, you can access the specific column of that row by using the following methods.</p>
+<pre><code>Type getType(int columnIndex)</code></pre>
+<p>OR</p>
+<pre><code>Type getType(String columnName)</code></pre>
+</div>
+<div class="section slide level2" id="sql-types">
+<h1 id="sql-types">SQL Types</h1>
+<p>A topic we did not mention earlier is that data stored into SQL has types that may be different from what you are used to, the following is a mapping of the types:</p>
+<table>
+    <tr>
+        <td>
+SQL type
+</td>
+        <td>
+Java Type
+</td>
+    </tr>
+    <tr>
+        <td>
+CHAR, VARCHAR, LONGVARCHAR
+</td>
+        <td>
+String
+</td>
+    </tr>
+    <tr>
+        <td>
+NUMERIC, DECIMAL
+</td>
+        <td>
+java.math.BigDecimal
+</td>
+    </tr>
+    <tr>
+        <td>
+BIT
+</td>
+        <td>
+boolean
+</td>
+    </tr>
+    <tr>
+        <td>
+TINYINT
+</td>
+        <td>
+byte
+</td>
+    </tr>
+    <tr>
+        <td>
+SMALLINT
+</td>
+        <td>
+short
+</td>
+    </tr>
+    <tr>
+        <td>
+INTEGER
+</td>
+        <td>
+int
+</td>
+    </tr>
+    <tr>
+        <td>
+BIGINT
+</td>
+        <td>
+long
+</td>
+    </tr>
+    <tr>
+        <td>
+REAL
+</td>
+        <td>
+float
+</td>
+    </tr>
+    <tr>
+        <td>
+FLOAT, DOUBLE
+</td>
+        <td>
+double
+</td>
+    </tr>
+    <tr>
+        <td>
+BIGINT
+</td>
+        <td>
+long
+</td>
+    </tr>   
+    <tr>
+        <td>
+BINARY, BIGINTVARBINARY, LONGVARBINARY
+</td>
+        <td>
+byte[]
+</td>
+    </tr>
+    <tr>
+        <td>
+DATE
+</td>
+        <td>
+java.sql.Date
+</td>
+    </tr>
+    <tr>
+        <td>
+TIME
+</td>
+        <td>
+java.sql.Time
+</td>
+    </tr>
+    <tr>
+        <td>
+TIMESTAMP
+</td>
+        <td>
+java.sql.Timestamp
+</td>
+    </tr>
+</table>
+
+</div>
+<div class="section slide level2" id="null-values">
+<h1 id="null-values">Null Values</h1>
+<p>In SQL, NULL simply means that the field in a row is empty. This is not the same as having field with &quot;&quot; or zero. You can ask JDBC if the <code>ResultSet.wasNull(atColumn);</code>.</p>
+<h3 id="timeouts">Timeouts</h3>
+<p>You will want to prevent queries from stalling your program. You can use the setQueryTimeOut(int seconds) method to set a timeout for the driver to stop the query. An SQLException will be thrown if the query times out.</p>
+</div>
+<div class="section slide level2" id="prepared-statements">
+<h1 id="prepared-statements">Prepared Statements</h1>
+<p>The majority of the time, your program will spend most of its time executing the same queries. To improve the performance of the program, JDBC offers the ability to parse the SQL query and save it in a PreparedStatement so that you may execute it multiple times without parsing anew each time.</p>
+<p>The PreparedStatement object works differently as you do not want to hard code the values of the query as we did with the regular Statement object. The PreparedStatement offers you the ability to use string interpolation in your query and to change the values each time you execute the query without having to re-parse.</p>
+<pre><code>String queryStr = &quot;SELECT * FROM employee WHERE superssn= ? and salary &gt; ?&quot;;
+PreparedStatement pstmt = con.prepareStatement(queryStr);
+pstmt.setString(1, &quot;333445555&quot;);
+pstmt.setInt(2, 26000);
+ResultSet rs = pstmt.executeQuery();</code></pre>
+</div>
+<div class="section slide level2" id="resultset-meta-data">
+<h1 id="resultset-meta-data">ResultSet Meta-Data</h1>
+<p>When selecting all information from the database, you may not know what columns are being returned. You can find out by using the ResultSetMetaData object.</p>
+<pre><code>ResultSetMetaData rsmd = rs.getMetaData(); // rs is a ResultSet object.
+int numcols = rsmd.getColumnCount();
+for (int i = 1 ; i &lt;= numcols; i++) {
+    System.out.print(rsmd.getColumnLabel(i)+&quot; &quot;);
+}</code></pre>
+</div>
+<div class="section slide level2" id="handling-errors">
+<h1 id="handling-errors">Handling Errors</h1>
+<p>Errors will arise with your SQL code and all errors will be wrapped in an SQLException object. This object will actually contain several exceptions. You can examine them by looping through using the <code>getNextException()</code> method.</p>
+<pre><code>try {
+    ...
+}
+catch (SQLException e) {
+    while (e != null) {
+        System.out.println(e.getSQLState());
+        System.out.println(e.getMessage());
+        System.out.println(e.getErrorCode());
+        e = e.getNextException();
+    }
+}</code></pre>
+</div>
+<div class="section slide level2" id="transactions">
+<h1 id="transactions">Transactions</h1>
+<p>Transactions are an important concept in database programming. A transaction is a group of statements that must all succeed or fail together. Depending on your program, you may need to update several tables for a specific action, for example; it could be updating a Customer table and an Order table at the same time. If one of the statements fails to execute correctly, we must be able to reverse the actions taken before or else we may be left with a database in an inconsistent state. The terminology used: commit = completing a transaction, rollback = cancelling a transaction.</p>
+<p>How do transactions work? The connection to the database has a state called AutoCommit. If this state is set to true, then every statement is automatically committed. If this state is set to false, then every statement is added to a transaction, the transaction is committed by calling Connection.commit() or rolled back by calling Connection.rollback().</p>
+</div>
+<div class="section slide level2" id="conclusion">
+<h1 id="conclusion">Conclusion</h1>
+<p>In this tutorial, we have discussed the relationship database model, the structured query language, the Java interface to databases, transactions and more. Databases are a complex topic, if you are interested, you should register for the database systems course at McGill.</p>
+</div>
+<div class="section slide level2" id="references">
+<h1 id="references">References</h1>
+<ul>
+<li><a href="http://www.ucl.ac.uk/archaeology/cisp/database/manual/node1.html">An introduction to databases</a></li>
+<li><a href="http://www.w3schools.com/sql/default.asp">W3 Schools</a></li>
+</ul>
+</div>
+</body>
+</html>

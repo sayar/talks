@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="author" content="Rami Sayar @ramisayar" />
+  <title>Ant Tutorial</title>
+  <link rel="stylesheet" type="text/css" media="screen, projection, print"
+    href="http://www.w3.org/Talks/Tools/Slidy2/styles/slidy.css" />
+  <script src="http://www.w3.org/Talks/Tools/Slidy2/scripts/slidy.js.gz"
+    charset="utf-8" type="text/javascript"></script>
+</head>
+<body>
+<div class="slide titlepage">
+  <h1 class="title">Ant Tutorial</h1>
+  <p class="author">
+Rami Sayar <a href="http://twitter/ramisayar">@ramisayar</a>
+  </p>
+  <p class="date">May 1st</p>
+</div>
+<div class="section slide level2" id="table-of-contents">
+<h1 id="table-of-contents">Table of Contents</h1>
+<ol style="list-style-type: decimal">
+<li><a href="#introduction-to-ant">Introduction to Ant</a></li>
+</ol>
+</div>
+<div class="section slide level2" id="introduction-to-ant">
+<h1 id="introduction-to-ant">Introduction to Ant</h1>
+<p>The purpose of this tutorial is to introduce you to building and compiling things with ant. Ant is a tool often used to build Java applications. Ant supplies built-in tasks to compile, assemble, test and run Java applications using a build file.</p>
+</div>
+<div class="section slide level2" id="getting-ant">
+<h1 id="getting-ant">Getting Ant</h1>
+<ol style="list-style-type: decimal">
+<li>Make sure you have a Java environment installed.</li>
+<li>Download Ant from <a href="http://ant.apache.org/">ant.apache.org</a></li>
+<li>Uncompress the downloaded file into a directory.</li>
+<li>Set environmental variables JAVA_HOME to your Java environment, ANT_HOME to the directory you uncompressed Ant to, and add ${ANT_HOME}/bin (Unix) or %ANT_HOME%/bin (Windows) to your PATH.</li>
+</ol>
+<p>NOTE: You should verify if you already have ant installed.</p>
+</div>
+<div class="section slide level2" id="project-preparation">
+<h1 id="project-preparation">Project Preparation</h1>
+<p>Ideally, you want to generate class files to a different location than the same directory as your source files. Typically, you will have a <code>classes</code> or <code>objects</code> folder for compiled files, <code>jar</code> or <code>bin</code> for a jar or executable file and a <code>src</code> or <code>source</code> directory.</p>
+<p>To do the above using the compiler directly can become complex and unwieldy for large projects. See below for an example.</p>
+<ol style="list-style-type: decimal">
+<li>Create directory for compiler outputs and source code.</li>
+</ol>
+<pre><code>mkdir -p build/classes build/jar src</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>Create a HelloWorld program.</li>
+</ol>
+<pre><code>vim src/HelloWorld.java</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li>Compile the java files, make sure to set the appropriate paths.</li>
+</ol>
+<pre><code>javac -sourcepath src -d build/classes src/HelloWorld.java</code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li>Run the compiled java program.</li>
+</ol>
+<pre><code>java -cp build/classes HelloWorld</code></pre>
+</div>
+<div class="section slide level2" id="ant-to-the-rescue">
+<h1 id="ant-to-the-rescue">Ant to the Rescue!</h1>
+<p>If we have more files, more directories, dependencies on other jar files, a more complicated build process, etc… it becomes unnecessarily difficult to interface with the compiler directly, tedious, error prone and genuinely unpleasant.</p>
+<p>Perhaps, you need a more complicated build process than the one described above. Perhaps, you need to download the source before compiled, prepare a build area by creating standard set of directories, configure the source code, validate it, compile it, test it, zip the executable, build documentation, etc…</p>
+<p>Build tools allow you to describe your build process, the dependencies between the steps, execute and manage the build, etc… without forcing every developer on a team to know the intimate details of the process. The build tool manages the build process for you and handles all of the details and steps. Ant provides you with a set of tools and techniques to define a build process and execute it.</p>
+</div>
+<div class="section slide level2" id="ant-build-files">
+<h1 id="ant-build-files">Ant Build Files</h1>
+<p>Ant uses a build.xml file to describe your process and is typically placed at the root of your project directory. Ant uses xml to describe the build process, the following a simple example to do what we did above using the command line directly with the exception that we also added the ability to generate a build file.</p>
+<p>NOTE: The example code is taken from <a href="http://ant.apache.org/manual/tutorial-HelloWorldWithAnt.html">the official Apache Ant tutorial</a></p>
+<pre><code>&lt;project&gt;
+    &lt;!-- Clean target which deletes the build directory. --&gt;
+    &lt;target name=&quot;clean&quot;&gt;
+        &lt;delete dir=&quot;build&quot;/&gt;
+    &lt;/target&gt;
+
+    &lt;!-- Create the output directory. Compile targets from src into build/classes. --&gt;
+    &lt;target name=&quot;compile&quot;&gt;
+        &lt;mkdir dir=&quot;build/classes&quot;/&gt;
+        &lt;javac srcdir=&quot;src&quot; destdir=&quot;build/classes&quot;/&gt;
+    &lt;/target&gt;
+
+    &lt;!-- Create the output directory. Build the jar file from the compiled classes. --&gt;
+    &lt;target name=&quot;jar&quot;&gt;
+        &lt;mkdir dir=&quot;build/jar&quot;/&gt;
+        &lt;jar destfile=&quot;build/jar/HelloWorld.jar&quot; basedir=&quot;build/classes&quot;&gt;
+            &lt;manifest&gt;
+                &lt;attribute name=&quot;Main-Class&quot; value=&quot;HelloWorld&quot;/&gt;
+            &lt;/manifest&gt;
+        &lt;/jar&gt;
+    &lt;/target&gt;
+
+    &lt;!-- Run the jar. --&gt;
+    &lt;target name=&quot;run&quot;&gt;
+        &lt;java jar=&quot;build/jar/HelloWorld.jar&quot; fork=&quot;true&quot;/&gt;
+    &lt;/target&gt;
+
+&lt;/project&gt;</code></pre>
+<p>Looking at the above build.xml file, we see a root node called project and several children called target. Each target has a name attribute which identifies what the target does. Inside each target you will see several nodes. The first node we can see is delete which simply deletes a directory or file. The second node is mkdir which simple creates a directory. The next node of interest is javac, this is very similar to the javac command line interface, we can set a source directory, a destination directory and more. The next node of interest is the jar node, which also has a child called manifest which allows us to set attributes to the jar file, such as a <code>Main-Class</code>. The last node of interest is the java node, which allows us to specify a jar to run with a fork (in another process).</p>
+<p>To compile, build and run any of the targets above, you can execute the following in the root directory. <code>ant TARGET_NAME</code></p>
+<pre><code>ant compile
+ant jar
+ant run</code></pre>
+<pre><code>ant compile jar run</code></pre>
+</div>
+<div class="section slide level2" id="enhancing-the-build-file">
+<h1 id="enhancing-the-build-file">Enhancing the Build File</h1>
+<p>Let's enhance the above build process to include nomenclature and cleaning mechanism to remove previously build class files. In this example, we set key-value properties as you can see from the property xml tags. We can also refer to properties using the <code>${name}</code> syntax. The compile target was updated to reference the properties set earlier in the file.</p>
+<pre><code>&lt;project name=&quot;HelloWorld&quot; basedir=&quot;.&quot; default=&quot;main&quot;&gt;
+    &lt;property name=&quot;src.dir&quot;     value=&quot;src&quot;/&gt;
+    &lt;property name=&quot;build.dir&quot;   value=&quot;build&quot;/&gt;
+    &lt;property name=&quot;classes.dir&quot; value=&quot;${build.dir}/classes&quot;/&gt;
+    &lt;property name=&quot;jar.dir&quot;     value=&quot;${build.dir}/jar&quot;/&gt;
+    &lt;property name=&quot;main-class&quot;  value=&quot;HelloWorld&quot;/&gt;
+
+    &lt;target name=&quot;clean&quot;&gt;
+        &lt;delete dir=&quot;${build.dir}&quot;/&gt;
+    &lt;/target&gt;
+
+    &lt;target name=&quot;compile&quot;&gt;
+        &lt;mkdir dir=&quot;${classes.dir}&quot;/&gt;
+        &lt;javac srcdir=&quot;${src.dir}&quot; destdir=&quot;${classes.dir}&quot;/&gt;
+    &lt;/target&gt;
+
+    &lt;target name=&quot;jar&quot; depends=&quot;compile&quot;&gt;
+        &lt;mkdir dir=&quot;${jar.dir}&quot;/&gt;
+        &lt;jar destfile=&quot;${jar.dir}/${ant.project.name}.jar&quot; basedir=&quot;${classes.dir}&quot;&gt;
+            &lt;manifest&gt;
+                &lt;attribute name=&quot;Main-Class&quot; value=&quot;${main-class}&quot;/&gt;
+            &lt;/manifest&gt;
+        &lt;/jar&gt;
+    &lt;/target&gt;
+
+    &lt;target name=&quot;run&quot; depends=&quot;jar&quot;&gt;
+        &lt;java jar=&quot;${jar.dir}/${ant.project.name}.jar&quot; fork=&quot;true&quot;/&gt;
+    &lt;/target&gt;
+
+    &lt;target name=&quot;clean-build&quot; depends=&quot;clean,jar&quot;/&gt;
+
+    &lt;target name=&quot;main&quot; depends=&quot;clean,run&quot;/&gt;
+
+&lt;/project&gt;</code></pre>
+<p>The new nodes such as property allow us to set a key-value which we can then refer to in other places in the build process using the <code>${}</code> mechanism.</p>
+</div>
+<div class="section slide level2" id="managing-dependencies">
+<h1 id="managing-dependencies">Managing Dependencies</h1>
+<p>Large java software projects will typically use many libraries and as a result have multiple dependencies. A common library used by java projects is Log4J. To integrate log4j into your project, you would download the latest jar and add it to a <code>lib</code> directory in you project root folder, you would then have to make that log4j is in your classpath for your project to compile. Handling dependencies is a perfect use case for build tools. Let's modify our above build.xml to add support for a <code>lib</code> directory and automatically adding jars to the class path.</p>
+<pre><code>&lt;project name=&quot;HelloWorld&quot; basedir=&quot;.&quot; default=&quot;main&quot;&gt;
+    ...
+    &lt;property name=&quot;lib.dir&quot; value=&quot;lib&quot;/&gt;
+
+    &lt;path id=&quot;classpath&quot;&gt;
+        &lt;fileset dir=&quot;${lib.dir}&quot; includes=&quot;**/*.jar&quot;/&gt;
+    &lt;/path&gt;
+    ...
+    &lt;target name=&quot;compile&quot;&gt;
+        &lt;mkdir dir=&quot;${classes.dir}&quot;/&gt;
+        &lt;javac srcdir=&quot;${src.dir}&quot; destdir=&quot;${classes.dir}&quot; classpathref=&quot;classpath&quot;/&gt;
+    &lt;/target&gt;
+
+    &lt;target name=&quot;run&quot; depends=&quot;jar&quot;&gt;
+        &lt;java fork=&quot;true&quot; classname=&quot;${main-class}&quot;&gt;
+            &lt;classpath&gt;
+                &lt;path refid=&quot;classpath&quot;/&gt;
+                &lt;path location=&quot;${jar.dir}/${ant.project.name}.jar&quot;/&gt;
+            &lt;/classpath&gt;
+        &lt;/java&gt;
+    &lt;/target&gt;
+    ...
+&lt;/project&gt;</code></pre>
+<p>Above you can see we specified a path node to easily reference paths in our build process, this is then used to build the classpath list in the run and compile mode.</p>
+</div>
+<div class="section slide level2" id="conclusion-to-ant">
+<h1 id="conclusion-to-ant">Conclusion to Ant</h1>
+<p>The above notes should be enough to give you a taste of Ant and to get you started with a simple build process for your project. Ant offers many built-in tools which can simplify your life. I highly recommend you take a look at the Ant documentation to learn more.</p>
+</div>
+<div class="section slide level2" id="references">
+<h1 id="references">References</h1>
+<ul>
+<li><a href="http://ant.apache.org/manual/tutorial-HelloWorldWithAnt.html">Tutorial: Hello World with Apache Ant</a></li>
+<li><a href="http://codefeed.com/tutorial/ant_intro.html">What is Ant?</a></li>
+</ul>
+</div>
+<div class="section slide level2" id="introduction-to-maven">
+<h1 id="introduction-to-maven">Introduction to Maven</h1>
+<p>Maven is another tool similar to Ant. Maven takes a more opinionated approach about how to generate, compile and run your projects. It expects a standard project structure.</p>
+<p>To generate a basic maven project, you can run the following command:</p>
+<pre><code>mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app \
+    -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false</code></pre>
+<p>This will generate the following project structure inside a my-app directory.</p>
+<pre><code>my-app
+|-- pom.xml
+`-- src
+    |-- main
+    |   `-- java
+    |       `-- com
+    |           `-- mycompany
+    |               `-- app
+    |                   `-- App.java
+    `-- test
+        `-- java
+            `-- com
+                `-- mycompany
+                    `-- app
+                        `-- AppTest.java</code></pre>
+</div>
+<div class="section slide level2" id="installing-maven">
+<h1 id="installing-maven">Installing Maven</h1>
+<p>Download maven for your distribution from <a href="http://maven.apache.org/download.cgi">here</a>. The following instructions are for Unix-based systems. You can find instructions for Windows <a href="http://maven.apache.org/download.cgi">here</a>.</p>
+<ol style="list-style-type: decimal">
+<li>Extract the distribution archive, i.e. apache-maven-3.0.5-bin.tar.gz to the directory you wish to install Maven 3.0.5. These instructions assume you chose /usr/local/apache-maven. The subdirectory apache-maven-3.0.5 will be created from the archive.</li>
+<li>In a command terminal, add the M2_HOME environment variable, e.g. export M2_HOME=/usr/local/apache-maven/apache-maven-3.0.5.</li>
+<li>Add the M2 environment variable, e.g. export M2=$M2_HOME/bin.</li>
+<li>Add M2 environment variable to your path, e.g. export PATH=<span class="math"><em>M</em>2: </span>PATH.</li>
+<li>Make sure that JAVA_HOME is set to the location of your JDK, e.g. export JAVA_HOME=/usr/java/jdk1.5.0_02 and that $JAVA_HOME/bin is in your PATH environment variable.</li>
+<li>Run mvn --version to verify that it is correctly installed.</li>
+</ol>
+</div>
+<div class="section slide level2" id="the-maven-pom-file">
+<h1 id="the-maven-pom-file">The Maven POM File</h1>
+<p>Maven will generate a <code>pom.xml</code> which describes the project's configuration, this is similar to the <code>build.xml</code> file generated by Ant.</p>
+<pre><code>&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+  xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&gt;
+  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+
+  &lt;groupId&gt;com.mycompany.app&lt;/groupId&gt;
+  &lt;artifactId&gt;my-app&lt;/artifactId&gt;
+  &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+  &lt;packaging&gt;jar&lt;/packaging&gt;
+
+  &lt;name&gt;Maven Quick Start Archetype&lt;/name&gt;
+  &lt;url&gt;http://maven.apache.org&lt;/url&gt;
+
+  &lt;dependencies&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;junit&lt;/groupId&gt;
+      &lt;artifactId&gt;junit&lt;/artifactId&gt;
+      &lt;version&gt;4.8.2&lt;/version&gt;
+      &lt;scope&gt;test&lt;/scope&gt;
+    &lt;/dependency&gt;
+  &lt;/dependencies&gt;
+&lt;/project&gt;</code></pre>
+<p>As you can see in the above xml, you can change the name of the project, the project url and ()what is extremely interesting about maven) the dependencies tag. In Ant, you had to manually manage the dependencies and add them to a lib folder before being able to compile them into the project. With Maven, you can simply write the identification of the dependencies (groupId, artifactId), the version you want and maven will handle downloading the dependency and including it in the build path.</p>
+</div>
+<div class="section slide level2" id="building-with-maven">
+<h1 id="building-with-maven">Building with Maven</h1>
+<p>To build with Maven you simply run <code>mvn package</code>. Maven also lets you run different pieces of the lifestyle process without you having to manually define them (as in Ant).</p>
+<ul>
+<li>validate: validate the project is correct and all necessary information is available</li>
+<li>compile: compile the source code of the project test: test the compiled source code using a suitable unit testing framework. These tests should not require the code be packaged or deployed package: take the compiled code and package it in its distributable format, such as a JAR.</li>
+<li>integration-test: process and deploy the package if necessary into an environment where integration tests can be run</li>
+<li>verify: run any checks to verify the package is valid and meets quality criteria</li>
+<li>install: install the package into the local repository, for use as a dependency in other projects locally</li>
+<li>deploy: done in an integration or release environment, copies the final package to the remote repository for sharing with other developers and projects.</li>
+<li>clean: cleans up artifacts created by prior builds</li>
+</ul>
+<p>You can also run the above commands in a specific sequence just like ant.</p>
+<pre><code>mvn clean dependency:copy-dependencies package</code></pre>
+</div>
+<div class="section slide level2" id="conclusion">
+<h1 id="conclusion">Conclusion</h1>
+<p>The above note is a small introduction to maven. Maven is a very powerful technology which does things in a specific, standard way.</p>
+</div>
+<div class="section slide level2" id="references-1">
+<h1 id="references-1">References</h1>
+<ul>
+<li><a href="http://maven.apache.org">Maven</a></li>
+<li><a href="http://maven.apache.org/guides/getting-started/maven-in-five-minutes.html">Maven in 5 Minutes</a></li>
+</ul>
+</div>
+</body>
+</html>

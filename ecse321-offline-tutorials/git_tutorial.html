@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="author" content="Rami Sayar @ramisayar" />
+  <title>Git Tutorial</title>
+  <link rel="stylesheet" type="text/css" media="screen, projection, print"
+    href="http://www.w3.org/Talks/Tools/Slidy2/styles/slidy.css" />
+  <script src="http://www.w3.org/Talks/Tools/Slidy2/scripts/slidy.js.gz"
+    charset="utf-8" type="text/javascript"></script>
+</head>
+<body>
+<div class="slide titlepage">
+  <h1 class="title">Git Tutorial</h1>
+  <p class="author">
+Rami Sayar <a href="http://twitter/ramisayar">@ramisayar</a>
+  </p>
+  <p class="date">May 1st, 2013</p>
+</div>
+<div class="section slide level2" id="what-is-git">
+<h1 id="what-is-git">What is git?</h1>
+<p>Version Control Systems are tools for software engineers to manage their source code over time. They are frequently used to manage different revisions of software projects, to help engineers collaborate and to work together. There has been many systems designed for this tasks, perhaps you may have used one previously such as SVN or CVS. This class will use Git which a recent development and differs significantly from previous VCS you may have used. Git is a Distributed Version Control System (DVCS). It is an evolution from local and central version control systems. Central version control systems such as SVN and CVS maintained a single authoritative copy of your project and it's history in one central location that was accessible to everybody on the project. However, this approach does not scale for large scale development efforts with 10s of concurrent branching efforts. New approaches using distributed version control where developed such as Git and Mercurial. Git was created and designed by Linus Torvalds to handle the incredible quickly paced, highly branched development of the Linux kernel.</p>
+<p>With Git, project members don't get just the latest version of a code base, instead they checkout a full mirror copy of the repository. As a result, you can do local VCS work and still be able to push out the changes in your code base to a central VCS or directly to your peers. Git is designed around the notion of content as opposed to changesets, branching and merging is thus significantly more powerful and easier to use than previous systems. Git is a powerful source code management system in use throughout industry and has led to many startups such as GitHub and BitBucket which expose a Git repository.</p>
+</div>
+<div class="section slide level2" id="where-do-i-get-git">
+<h1 id="where-do-i-get-git">Where do I get git?</h1>
+<p>You can download git for your operating system using your system's package manager or by downloading an installer from <a href="http://git-scm.com">http://git-scm.com</a>.</p>
+<p>If you are on a mac and have either Ports or Brew installed, you can use the terminal to install git via the following commands.</p>
+<pre><code>$ sudo ports install git</code></pre>
+<p>or</p>
+<pre><code>$ brew install git</code></pre>
+</div>
+<div class="section slide level2" id="how-do-i-use-git">
+<h1 id="how-do-i-use-git">How do I use git?</h1>
+<p>The general preferred method of using git is through a terminal. Git comes with an wealth of command line tools. However, it is possible to use git through a graphical interface but you will be limited to what the tool provides you.</p>
+<p>If you are a Windows users, you may be uncomfortable using the terminal. Instead, you can use the <a href="http://windows.github.com/">GitHub for Windows Client</a>. If you are a Mac user, you also have a similar option, <a href="http://mac.github.com/">GitHub for Mac</a>. These tools allow you to do the most of what will be described in the rest of this tutorial however it is recommended you use git through a terminal. It's great practice for future work on the terminal as well (such as your Operating Systems class).</p>
+</div>
+<div class="section slide level2" id="how-does-git-work">
+<h1 id="how-does-git-work">How does Git Work?</h1>
+<p>Historically, source control management software would work by tracking the changes to a base file over time.</p>
+<p><img src="http://www.git-scm.com/figures/18333fig0104-tn.png" alt="image" /> <a href="http://www.git-scm.com/book/en/Getting-Started-Git-Basics#Snapshots,-Not-Differences">REFERENCE</a></p>
+<p>Your local repository consists of snapshots of your files. Git treat your repository as if it were a mini-filesystem and will store references to the current state.</p>
+<p><img src="http://www.git-scm.com/figures/18333fig0105-tn.png" alt="image" /> <a href="http://www.git-scm.com/book/en/Getting-Started-Git-Basics#Snapshots,-Not-Differences">REFERENCE</a></p>
+<p>Everything is local and, as a result, very fast. Your repository can exist entirely within your computer, or be accessible within a LAN, you do not need to get on the Internet. You can literally have git work over network shares (DO NOT DO THIS.)</p>
+<p>Everything in git is check-summed and referred to by checksums. You will not be able to hack git to ignore changes in your files. Git will detect every change and it will use hashes everywhere. Git will then refer to files using a hash as opposed to the file name.</p>
+<p>Git almost always simply adds data, so it is very hard to mess up your version control system or be unable to recover data or go back in time.</p>
+<p><img src="http://www.git-scm.com/figures/18333fig0106-tn.png" alt="image" /> <a href="http://www.git-scm.com/book/en/Getting-Started-Git-Basics#The-Three-States">REFERENCE</a></p>
+</div>
+<div class="section slide level2" id="creating-a-new-repository">
+<h1 id="creating-a-new-repository">Creating a new repository</h1>
+<p>The first step in any project is to create a directory to hold your code and documentation.</p>
+<p>Create a directory:</p>
+<pre><code>$ mkdir sample-project</code></pre>
+<p>Change into the directory:</p>
+<pre><code>$ cd sample-project</code></pre>
+<p>The next command will tell git to create a hidden folder <code>.git</code> in your directory and to start tracking changes to your code.</p>
+<pre><code>$ git init
+
+Initialized empty Git repository in /path/to/sample-project/.git/</code></pre>
+<p>git init comes with some useful extras such as --template which will allow you to use a template repository and add initial files.</p>
+<p>git init --shared allows you to specify repository information if you are sharing a repository with several users.</p>
+<p>You can run the following for more information.</p>
+<pre><code>git init -h</code></pre>
+</div>
+<div class="section slide level2" id="adding-removing-and-committing">
+<h1 id="adding-removing-and-committing">Adding, Removing and Committing</h1>
+<p>Assuming you have started writing some code in the directory you created. When you feel your code has reached a useful state, your next step is to add the code to the repository. Let's say you created a README file about your project.</p>
+<p>You can run <code>git status</code> to see the current status of your repository.</p>
+<pre><code>$ git status
+
+# On branch master
+#
+# Initial commit
+#
+# Untracked files:
+#   README
+nothing added to commit but untracked files present</code></pre>
+<p>You will notice that git is informing you of untracked files. These are the files you just created. To add them to your repository, you have several options using the <code>git add</code> command. You don't only add new files, you also add changed files.</p>
+<pre><code>$ git add path/to/file
+$ git add *</code></pre>
+<p>You can run the following for more information.</p>
+<pre><code>git add -h</code></pre>
+<p>After adding all the files, if you run <code>git status</code> again, you will notice that all the files you added are now staged for commit. You will commit this changeset to the repository using the git commit command.</p>
+<pre><code>$ git commit</code></pre>
+<p>or</p>
+<pre><code>$ git commit -m &quot;Commit my file.&quot;
+[master (root-commit) 47d6aa5] Commit my file.
+ 0 files changed
+ create mode 100644 README
+</code></pre>
+<p>The first command will open your default text editor which tends to be either <code>vi</code> or <code>nano</code>. Refer to online tutorials for how to use <code>vi</code>.</p>
+<p>After committing your first commit, git has recorded the first content state in the local repository and it refers to this state as the HEAD.</p>
+<p>Removing files is simple</p>
+<pre><code>$ git rm path/to/file</code></pre>
+<p>For further reference, if you need to refer to the latest change you can use <code>HEAD</code>, the second to last change <code>HEAD^</code>, a certain number of changes back <code>HEAD~n</code>.</p>
+</div>
+<div class="section slide level2" id="branching">
+<h1 id="branching">Branching</h1>
+<p>The true power in the git approach to version control is branching. Branches are simply diversions in your code changesets. You branch off a certain point in history and add more revision of your code from there. You can revert to another branch that may have gone a completely different direction. You can switch between different branches and take the same code base in other ways. As a note, you will always start on a &quot;master&quot; branch. Creating a branch will not</p>
+<pre><code>$ git branch [branch_name]</code></pre>
+<p>To list all the branches:</p>
+<pre><code>$ git branch -l
+
+* master
+  [branch_name]
+</code></pre>
+<p>To delete a branch:</p>
+<pre><code>$ git branch -d [branch_name]
+
+Deleted branch [branch_name] (was 47d6aa5).
+</code></pre>
+<p>To switch from one branch to another, you can use the checkout tool.</p>
+<pre><code>$ git checkout [branch_name]
+
+Switched to branch &#39;[branch_name]&#39;</code></pre>
+<p>If you want to checkout and create a branch in one shot, you can use:</p>
+<pre><code>$ git checkout -b [branch_name]
+
+Switched to a new branch &#39;[branch_name]&#39;</code></pre>
+</div>
+<div class="section slide level2" id="branch-management">
+<h1 id="branch-management">Branch Management</h1>
+<p>Branch management is an important task, as typically the number of branches will increase quickly on an project. The most typical information you will need to know is which branch have been merged or not merged with the current branch that you are in. The following commands can help you get that information, we will discuss merging next.</p>
+<pre><code>$ git branch -v
+  master 47d6aa5 Commit my file
+* [branch_name]  47d6aa5 Commit my file
+
+
+$ git branch --merged
+$ git branch --no-merged</code></pre>
+</div>
+<div class="section slide level2" id="merging">
+<h1 id="merging">Merging</h1>
+<p>Merging essentially incorporate the development history from another branch into your current branch. To merge a branch into the current branch, you can simply run:</p>
+<pre><code>$ git merge [branch_name]
+</code></pre>
+<p>Git tries to auto-merge changes. Unfortunately, conflicts arise, so you will have to manually edit the files shown by git. After fixing the file, you add them to the staging area.</p>
+<pre><code>$ git add [filename]
+$ git commit -m &quot;Merge commit.&quot;
+</code></pre>
+<p>You can also preview changes using the git diff command.</p>
+<pre><code>$ git diff [source_branch] [target_branch]
+$ git diff [filename]</code></pre>
+</div>
+<div class="section slide level2" id="tagging">
+<h1 id="tagging">Tagging</h1>
+<p>To keep track of your software releases, you can use a the tagging feature.</p>
+<pre><code>$ git tag</code></pre>
+<p>Tags exist in two forms, lightweight and annotated. Lightweight tags can not be changed, but annotated tags are full objects that can have messages, be updated, etc…</p>
+<p>Lightweight tag:</p>
+<pre><code>$ git tag first-version [COMMIT_ID]
+$ git tag 1.0.0 [COMMIT_ID]</code></pre>
+<p>You can get the commit id by using the log.</p>
+<p>Annotated tag:</p>
+<pre><code>$ git tag -a 1.0.0 -m &quot;Here is my first version&quot;</code></pre>
+</div>
+<div class="section slide level2" id="using-the-log">
+<h1 id="using-the-log">Using the Log</h1>
+<p>The log is an extremely powerful tool and will tell you about the development history of the current branch. You can use to figure out what changes have taken place and who committed these changes. The following is a list of variations on the git log command to achieve different objectives.</p>
+<pre><code>$ git log 
+$ git log --stat
+$ git log --author=sayar
+$ git log --stat [subdirectory]
+$ git log --grep=&#39;.*foo.*&#39;
+$ git log --since=&quot;1 week ago&quot; --until=&quot;2 weeks ago&quot;
+$ git shortlog -sn</code></pre>
+<p><a href="http://blog.mixu.net/2012/04/06/git-tips-and-tricks/">REFERENCE</a></p>
+</div>
+<div class="section slide level2" id="replacing-local-changes">
+<h1 id="replacing-local-changes">Replacing local changes</h1>
+<p>To replace changes in the working tree to whatever is in HEAD a.k.a. the latest change.</p>
+<pre><code>$ git checkout -- [filename]</code></pre>
+<p>HOWEVER, changes in the staging area and new files are kept. To drop all changes you have to reset your repository.</p>
+<pre><code>$ git reset
+$ git reset --soft HEAD^
+$ git reset --hard</code></pre>
+<p>Undo a commit and redo</p>
+<pre><code>$ git commit ...
+$ git reset --soft HEAD^
+$ edit
+$ git commit -a -c ORIG_HEAD</code></pre>
+<p>Undo a commit, making it a topic branch</p>
+<pre><code>$ git branch topic/wip
+$ git reset --hard HEAD~3
+$ git checkout topic/wip</code></pre>
+<p>This will still not delete new files you added, so you can recommit them if necessary.</p>
+</div>
+<div class="section slide level2" id="branching-workflows">
+<h1 id="branching-workflows">Branching Workflows</h1>
+<p>Long-Running Branches - As branches are simply pointers to commits, you can keep running many branches without a great difficulty in merging back.</p>
+<p>Topic Branches - Branches can be short-lived. You can create and use a branch for implementing a single feature or topic. As it is fairly straightforward to merge back, I highly recommend you do so as it allows you segment your work into manageable chunks.</p>
+<p><img src="http://nvie.com/img/2009/12/Screen-shot-2009-12-24-at-11.32.03.png" alt="image" /> <a href="http://nvie.com/posts/a-successful-git-branching-model/">REFERENCE</a></p>
+</div>
+<div class="section slide level2" id="getting-an-existing-repository">
+<h1 id="getting-an-existing-repository">Getting an existing repository</h1>
+<p>All the work we have done above was entirely local to our machine. The first step in communicating with the outside world is to get an external repository. We can do this with the clone tool and we can retrieve repositories on a specific path or on a user@host.</p>
+<pre><code>$ git clone /path/to/repo
+$ git clone username@host:/path/to/repo</code></pre>
+</div>
+<div class="section slide level2" id="cloning-from-github">
+<h1 id="cloning-from-github">Cloning from GitHub</h1>
+<p>Most of the open source repositories are now hosted on GitHub. GitHub at its most basic level provides you with a platform to host your git repositories and to be able to collaborate on the code within without needing a direct connection to somebody else's machine.</p>
+<p>GitHub Example using HTTPS:</p>
+<pre><code>$ git clone https://github.com/username/repo.git</code></pre>
+<p>If you have your SSH keys setup with your GitHub account, you can use the SSH transport. Benefits are that you will not have to constantly sign in with your GitHub account. See Setting up SSH Keys with GitHub.</p>
+<p>GitHub Example:</p>
+<pre><code>$ git clone git@github.com:username/repo.git</code></pre>
+</div>
+<div class="section slide level2" id="pushing-changes-to-remote-repository">
+<h1 id="pushing-changes-to-remote-repository">Pushing changes to remote repository</h1>
+<p>If we already have created a repository on our local machine and we can add a remote repository by using the git-remote tool.</p>
+<pre><code>$ git remote add origin /path/to/repo
+$ git remote add origin username@host:/path/to/repo</code></pre>
+<p>The remote repository can be empty or contain the same history (which it will if you cloned it in the first place). To push your local history to the remote repository, you can use the git-push tool. You can use this tool to push to different branches from your local branch. If you do not specify a remote branch name, git will assume the remote branch has the same name as the local branch.</p>
+<pre><code>$ git push [remotename] [localbranch]:[remotebranch]</code></pre>
+<p>The following is a simple example of pushing your local master branch to the master branch on the remote repository.</p>
+<pre><code>$ git push origin master</code></pre>
+</div>
+<div class="section slide level2" id="fetching">
+<h1 id="fetching">Fetching</h1>
+<p>To synchronize repositories with a remote repository you can use fetch to get the latest histories.</p>
+<pre><code>$ git fetch origin </code></pre>
+</div>
+<div class="section slide level2" id="merging-remote-branches">
+<h1 id="merging-remote-branches">Merging Remote Branches</h1>
+<p>To merge remote repositories, you can specify the repository name and branch name with the slash separator.</p>
+<pre><code>$ git merge origin/master</code></pre>
+<p>If you want to create a branch from the remote repository, check out into it and inform git to track the branch, you can use the following. Tracking a repository simply tells git to set the upstream direction so that you don't have to specify the full details of your push/pull each time (e.g. the remotename is set for you).</p>
+<pre><code>$ git checkout -t origin/[branch]</code></pre>
+</div>
+<div class="section slide level2" id="deleting-remote-branches">
+<h1 id="deleting-remote-branches">Deleting Remote Branches</h1>
+<p>To delete a remote branch, you simply push nothing into a remote branch.</p>
+<pre><code>$ git push [remotename] :[remotebranch]</code></pre>
+</div>
+<div class="section slide level2" id="using-pull">
+<h1 id="using-pull">Using Pull</h1>
+<p>If you already have an upstream setting, you can use git pull to do a fetch and merge.</p>
+<pre><code>$ git pull [remote] [branch]
+$ git pull origin master</code></pre>
+</div>
+<div class="section slide level2" id="github-pull-request">
+<h1 id="github-pull-request">GitHub Pull Request</h1>
+<p>Pull requests let you notify a repository owner that you've offered a set of changes for a merge. If a pull request is sent, the owner can review, discuss changes, add commits and then merge your set of changes into a branch.</p>
+<h4 id="fork-pull">Fork &amp; Pull</h4>
+<p>Allows you to clone a repository and then notify the owner of changes you've made in your own fork.</p>
+<h4 id="shared-repository-model">Shared Repository Model</h4>
+<p>If you are sharing a repository, you can still use pull requests to discuss and notify each other about changes taking place in your branch before you merge.</p>
+<p><a href="https://help.github.com/articles/using-pull-requests">GitHub Using Pull Requests</a></p>
+<p>To use pull requests, you must go on the GitHub project page (of your clone or the page itself) and press the pull request button. For open source projects, unless you were listed as a collaborator, you will not be able to use the shared repository model, you must fork the project, push your code and then send your pull request back to the original repository.</p>
+</div>
+<div class="section slide level2" id="git-config">
+<h1 id="git-config">Git Config</h1>
+<pre><code>$ git config --global -e
+
+$ git config --global user.name &quot;Rami Sayar&quot;
+
+$ git config color.ui true
+$ git config format.pretty oneline
+
+$ git config --global alias.co checkout
+$ git config --global alias.br branch
+$ git config --global alias.lg log
+$ git config --global alias.st status</code></pre>
+</div>
+<div class="section slide level2" id="git-ignore">
+<h1 id="git-ignore">Git Ignore</h1>
+<p>.gitignore is a file in your repository which informs git to ignore certain files and directories.</p>
+<p>Sample for Java</p>
+<pre><code>*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear</code></pre>
+<p><a href="https://github.com/github/gitignore">GitHub GitIgnore Repository</a></p>
+</div>
+<div class="section slide level2" id="setting-up-ssh-keys-with-github">
+<h1 id="setting-up-ssh-keys-with-github">Setting up SSH Keys with GitHub</h1>
+<p>The authoritative documentation is on <a href="https://help.github.com/articles/generating-ssh-keys">GitHub</a>. You will mostly have to generate an ssh key if you do not have one and upload the public key to GitHub.</p>
+</div>
+<div class="section slide level2" id="advanced-topics">
+<h1 id="advanced-topics">Advanced Topics</h1>
+<ul>
+<li><a href="http://www.git-scm.com/book/en/Git-Branching-Rebasing">Git Branch Rebasing</a></li>
+<li><a href="http://www.git-scm.com/book/en/Git-Tools-Revision-Selection">Git Tools - Revision Selection</a></li>
+<li><a href="http://www.git-scm.com/book/en/Git-Tools-Rewriting-History">Git Tools - Rewriting History</a></li>
+<li><a href="http://www.git-scm.com/book/en/Git-Tools-Submodules">Git Tools - Submodules</a></li>
+<li><a href="http://www.git-scm.com/book/en/Git-Tools-Subtree-Merging">Git Tools - Subtree Merging</a></li>
+</ul>
+</div>
+<div class="section slide level2" id="references">
+<h1 id="references">References</h1>
+<ul>
+<li><a href="http://rogerdudler.github.com/git-guide/">git - the simple guide by Roger Dudler</a></li>
+<li><a href="http://www.git-scm.com/book">Pro Git by Scott Chacon</a></li>
+<li><a href="https://help.github.com/">github:help</a></li>
+</ul>
+</div>
+</body>
+</html>
