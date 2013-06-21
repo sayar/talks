@@ -7,3 +7,6 @@
 [submodule "flight-booking-example"]
 	path = flight-booking-example
 	url = git@github.com:sayar/flight-booking-example.git
+[submodule "tedxhec"]
+	path = tedxhec
+	url = git@github.com:sayar/tedxhec.git
