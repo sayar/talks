@@ -4,3 +4,6 @@
 [submodule "deck.js-codemirror"]
 	path = deck.js-codemirror
 	url = git@github.com:sayar/deck.js-codemirror.git
+[submodule "flight-booking-example"]
+	path = flight-booking-example
+	url = git@github.com:sayar/flight-booking-example.git
