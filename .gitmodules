@@ -10,3 +10,6 @@
 [submodule "tedxhec"]
 	path = tedxhec
 	url = git@github.com:sayar/tedxhec.git
+[submodule "reveal.js"]
+	path = reveal.js
+	url = git@github.com:hakimel/reveal.js.git
